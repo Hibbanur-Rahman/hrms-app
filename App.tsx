@@ -67,9 +67,9 @@ function AppContent() {
 
   if (loading || !initialRoute) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" />
-        <Text>Checking auth status...</Text>
+      <View className='bg-white flex-1 justify-center items-center'>
+        <ActivityIndicator size="large" color="#9333EA" />
+        <Text className='text-gray-600 text-base' style={{fontFamily: 'Poppins-Regular'}}>Checking auth status...</Text>
       </View>
     );
   }

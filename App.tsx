@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { Provider, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { enableScreens } from 'react-native-screens';
 
@@ -12,6 +12,7 @@ import {
   handleIsAuthenticated,
   handleUserLogin,
 } from './src/redux/slices/auth/authSlice';
+import "./global.css"
 
 import Login from './src/screens/auth/login';
 import Register from './src/screens/auth/register';
@@ -20,10 +21,9 @@ import Layout from './src/layout/dashboardLayout';
 import ForgotPassword from './src/screens/auth/forgotPassword';
 import AuthService from './src/services/AuthService';
 
-// Enable react-native-screens for better performance
+
 enableScreens();
 
-// Define navigation types
 export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
@@ -36,100 +36,63 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 function AppContent() {
   const dispatch = useDispatch();
-  const [authInitialRouteName, setAuthInitialRouteName] = useState<
-    keyof RootStackParamList | undefined
-  >(undefined);
+  const [loading, setLoading] = useState(true);
+  const [initialRoute, setInitialRoute] =
+    useState<keyof RootStackParamList | null>(null);
 
-  const isAuthenticated = useSelector(
-    (state: any) => state.auth.isAuthenticated,
-  );
-
-  // Handle token fetch
-  const handleFetchToken = async () => {
+  const checkAuthStatus = async () => {
     try {
-      const storedToken = await AsyncStorage.getItem('access_token');
-      const user = await AsyncStorage.getItem('user');
-      if (storedToken) {
+      const token = await AsyncStorage.getItem('access_token');
+      if (token) {
         dispatch(handleIsAuthenticated({ isAuthenticated: true }));
-        handleGetUserDetails();
-        // dispatch(handleUserLogin(JSON.parse(user)));
-        setAuthInitialRouteName('Layout');
+        const response = await AuthService.GetUserDetail();
+        if (response?.status === 200) {
+          dispatch(handleUserLogin(response.data.data));
+        }
+        setInitialRoute('Layout');
       } else {
-        dispatch(handleIsAuthenticated({ isAuthenticated: false }));
-        setAuthInitialRouteName('StartScreen');
+        setInitialRoute('StartScreen');
       }
     } catch (error) {
-      console.error('Error fetching token:', error);
-      setAuthInitialRouteName('StartScreen');
-    }
-  };
-
-  const handleGetUserDetails = async () => {
-    try {
-      const response = await AuthService.GetUserDetail();
-      if (response?.status === 200) {
-        const userJson = JSON.stringify(response.data.data);
-        await AsyncStorage.setItem('user', userJson);
-        dispatch(handleUserLogin(response.data.data));
-      }
-    } catch (error) {
-      console.error('Error fetching user details:', error);
+      console.error('Auth check error:', error);
+      setInitialRoute('StartScreen');
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    handleFetchToken();
+    checkAuthStatus();
   }, []);
 
-  useEffect(() => {
-    setAuthInitialRouteName(isAuthenticated ? 'Layout' : 'StartScreen');
-  }, [isAuthenticated]);
+  if (loading || !initialRoute) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+        <Text>Checking auth status...</Text>
+      </View>
+    );
+  }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <NavigationContainer>
-        <SafeAreaView className="flex-1 bg-white">
-          {authInitialRouteName && (
-            <Stack.Navigator initialRouteName={authInitialRouteName}>
-              <Stack.Screen
-                name="Layout"
-                component={Layout}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="StartScreen"
-                component={StartScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Register"
-                component={Register}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="ForgotPassword"
-                component={ForgotPassword}
-                options={{ headerShown: false }}
-              />
-            </Stack.Navigator>
-          )}
-        </SafeAreaView>
-      </NavigationContainer>
-    </GestureHandlerRootView>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName={initialRoute}>
+        <Stack.Screen name="StartScreen" component={StartScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+        <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
+        <Stack.Screen name="Layout" component={Layout} options={{ headerShown: false }} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-function App(): React.JSX.Element {
+export default function App() {
   return (
     <Provider store={store}>
-      <AppContent />
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <AppContent />
+      </GestureHandlerRootView>
     </Provider>
   );
 }
-
-export default App;

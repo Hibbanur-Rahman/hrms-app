@@ -4,7 +4,7 @@ import apiUrls from '../config/apiUrl';
 const Login = async (payload: any) =>
   Request({
     method: 'POST',
-    url: `${apiUrls.login}`,
+    url: `auth/${apiUrls.login}`,
     data: payload,
   });
 const Register = async (payload: any) =>
@@ -17,13 +17,13 @@ const Register = async (payload: any) =>
 const ForgotPassword = async (payload: any) =>
   Request({
     method: 'POST',
-    url: `${apiUrls.forgotPassword}`,
+    url: `auth/${apiUrls.forgotPassword}`,
     data: payload,
   });
 const GetUserDetail=async()=>
   Request({
     method: 'GET',
-    url: `${apiUrls.getUserDetail}`,
+    url: `auth/${apiUrls.getUserDetail}`,
     secure: true,
   });
 

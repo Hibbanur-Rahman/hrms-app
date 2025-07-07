@@ -21,12 +21,17 @@ import Animated, {
   Extrapolate,
   runOnJS,
 } from 'react-native-reanimated';
+import {
+  Gesture,
+  GestureDetector,
+} from 'react-native-gesture-handler';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const { width } = Dimensions.get('window');
+const SWIPE_THRESHOLD = width * 0.3;
 
 const onboardingData = [
   {
@@ -58,51 +63,105 @@ export default function StartScreens() {
   const [isNavigating, setIsNavigating] = useState(false);
   const [currentData, setCurrentData] = useState(onboardingData[0]);
   
-  const slideAnimation = useSharedValue(0);
+  const translateX = useSharedValue(0);
   const imageScale = useSharedValue(1);
-
-  const animatedImageStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { scale: interpolate(imageScale.value, [0, 1], [0.8, 1]) },
-      ],
-    };
-  });
 
   const updateStep = useCallback((step: number) => {
     setCurrentStep(step);
     setCurrentData(onboardingData[step - 1]);
   }, []);
 
+  const pan = Gesture.Pan()
+    .onUpdate((event) => {
+      if (
+        (currentStep === 1 && event.translationX > 0) || 
+        (currentStep === 3 && event.translationX < 0)
+      ) {
+        translateX.value = event.translationX / 3; // Add resistance at edges
+      } else {
+        translateX.value = event.translationX;
+      }
+    })
+    .onEnd((event) => {
+      if (Math.abs(event.translationX) > SWIPE_THRESHOLD) {
+        if (event.translationX > 0 && currentStep > 1) {
+          // Swipe right - go to previous
+          runOnJS(updateStep)(currentStep - 1);
+          translateX.value = withSpring(0, {
+            damping: 20,
+            stiffness: 200,
+            mass: 0.5
+          });
+        } else if (event.translationX < 0 && currentStep < 3) {
+          // Swipe left - go to next
+          runOnJS(updateStep)(currentStep + 1);
+          translateX.value = withSpring(0, {
+            damping: 20,
+            stiffness: 200,
+            mass: 0.5
+          });
+        } else {
+          // Bounce back if at edges
+          translateX.value = withSpring(0, {
+            damping: 20,
+            stiffness: 200
+          });
+        }
+      } else {
+        // Return to original position if swipe wasn't far enough
+        translateX.value = withSpring(0, {
+          damping: 20,
+          stiffness: 200
+        });
+      }
+    });
+
+  const animatedContentStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { translateX: translateX.value },
+      ],
+    };
+  });
+
+  const animatedImageStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { scale: interpolate(imageScale.value, [0, 1], [0.8, 1]) },
+        { translateX: translateX.value },
+      ],
+    };
+  });
+
   const handleNext = () => {
-    if (isNavigating) return;
-    if (currentStep === 3) {
-      handleGetStarted();
+    if (isNavigating || currentStep === 3) {
+      AsyncStorage.setItem('isOnboardingCompleted', 'true');
+      console.log('isOnboardingCompleted', 'true');
+      console.log('currentStep', currentStep);
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Login' }],
+      });
       return;
     }
     
-    const next = currentStep + 1;
-    imageScale.value = withSpring(0.8, {}, () => {
-      runOnJS(updateStep)(next);
-      imageScale.value = withSpring(1);
-    });
-    
-    slideAnimation.value = withTiming(1, {
-      duration: 500,
-    }, () => {
-      slideAnimation.value = 0;
+    runOnJS(updateStep)(currentStep + 1);
+    translateX.value = withSpring(0, {
+      damping: 20,
+      stiffness: 200,
+      mass: 0.5
     });
   };
 
   const handlePrevious = () => {
-    if (isNavigating) return;
-    if (currentStep > 1) {
-      const prev = currentStep - 1;
-      imageScale.value = withSpring(0.8, {}, () => {
-        runOnJS(updateStep)(prev);
-        imageScale.value = withSpring(1);
-      });
-    }
+    if (isNavigating || currentStep === 1) return;
+    
+    runOnJS(updateStep)(currentStep - 1);
+    translateX.value = withSpring(0, {
+      damping: 50,
+      stiffness: 200,
+      mass: 0.5
+    });
   };
 
   const handleGetStarted = () => {
@@ -128,7 +187,7 @@ export default function StartScreens() {
 
   const renderProgressDots = () => {
     return (
-      <View className="flex-row justify-center space-x-2 mb-8">
+      <View className="flex-row justify-center space-x-2 mb-8 gap-2">
         {onboardingData.map((_, index) => (
           <View
             key={index}
@@ -145,10 +204,7 @@ export default function StartScreens() {
 
   return (
     <SafeAreaView className="flex-1">
-      <LinearGradient
-        colors={['#ffffff', '#f3f4f6', '#ffffff']}
-        className="flex-1"
-      >
+      <View className="flex-1 bg-white">
         <StatusBar barStyle="dark-content" />
         
         <View className="absolute top-4 right-6 z-10">
@@ -163,35 +219,40 @@ export default function StartScreens() {
           </TouchableOpacity>
         </View>
 
-        <View className="flex-1 justify-center items-center px-6">
-          <Animated.View 
-            className="justify-center items-center mb-12"
-            style={animatedImageStyle}
-          >
-            <View className="rounded-[40px] border-2 border-purple-100 overflow-hidden shadow-2xl bg-white p-2">
-              <Image
-                source={currentData.image}
-                className="w-[280px] h-[280px] rounded-[32px]"
-                resizeMode="cover"
-              />
-            </View>
-          </Animated.View>
+        <GestureDetector gesture={pan}>
+          <View className="flex-1 justify-center items-center px-6">
+            <Animated.View 
+              className="justify-center items-center mb-12"
+              style={animatedImageStyle}
+            >
+              <View className="rounded-[40px] border-2 border-purple-100 overflow-hidden shadow-2xl bg-white p-2">
+                <Image
+                  source={currentData.image}
+                  className="w-[280px] h-[280px] rounded-[32px]"
+                  resizeMode="cover"
+                />
+              </View>
+            </Animated.View>
 
-          <Animated.View className="items-center">
-            <Text
-              className="text-3xl  text-gray-800 text-center mb-4 leading-tight px-4"
-              style={{fontFamily: 'Poppins-Bold'}}
+            <Animated.View 
+              className="items-center"
+              style={animatedContentStyle}
             >
-              {currentData.title}
-            </Text>
-            <Text
-              className="text-gray-600 text-center text-lg leading-relaxed px-6"
-              style={{fontFamily: 'Poppins-Regular'}}
-            >
-              {currentData.description}
-            </Text>
-          </Animated.View>
-        </View>
+              <Text
+                className="text-3xl text-gray-800 text-center mb-4 leading-tight px-4"
+                style={{fontFamily: 'Poppins-Bold'}}
+              >
+                {currentData.title}
+              </Text>
+              <Text
+                className="text-gray-600 text-center text-lg leading-relaxed px-6"
+                style={{fontFamily: 'Poppins-Regular'}}
+              >
+                {currentData.description}
+              </Text>
+            </Animated.View>
+          </View>
+        </GestureDetector>
 
         {renderProgressDots()}
 
@@ -210,7 +271,7 @@ export default function StartScreens() {
             <TouchableOpacity
               className="bg-purple-600 rounded-full shadow-lg shadow-purple-300"
               onPress={handleNext}
-              disabled={isNavigating}
+              
             >
               <View className="flex-row items-center justify-center gap-2 px-8 py-4">
                 <Text
@@ -228,7 +289,7 @@ export default function StartScreens() {
             </TouchableOpacity>
           </View>
         </View>
-      </LinearGradient>
+      </View>
     </SafeAreaView>
   );
 }

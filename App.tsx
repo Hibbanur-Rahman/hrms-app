@@ -89,10 +89,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <Provider store={store}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Provider store={store}>
         <AppContent />
-      </GestureHandlerRootView>
-    </Provider>
+      </Provider>
+    </GestureHandlerRootView>
   );
 }

@@ -22,13 +22,13 @@ import { formatDate } from '../utils/dateTimeFormater';
 import DatePicker from 'react-native-date-picker';
 import tw from 'twrnc';
 import { useFocusEffect } from '@react-navigation/native';
-import { MultiSelect } from 'react-native-element-dropdown';
+import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import DocumentPicker, {
   DocumentPickerResponse,
   pick,
   types,
 } from '@react-native-documents/picker';
-import Password from '../../assets/images/dashboard-employee.png';
+import Password from '../assets/images/dashboard-employee.png';
 
 const AddProjectDialog = ({
   isCreateDialogOpen,
@@ -37,6 +37,8 @@ const AddProjectDialog = ({
   handleCreateProject,
   loading,
   setLoading,
+  editProject,
+  handleEditProject,
 }: {
   isCreateDialogOpen: boolean;
   setIsCreateDialogOpen: (value: boolean) => void;
@@ -44,16 +46,21 @@ const AddProjectDialog = ({
   handleCreateProject: (payload: any) => void;
   loading: boolean;
   setLoading: (value: boolean) => void;
+  editProject: any;
+  handleEditProject: (payload: any) => void;
 }) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [team, setTeam] = useState<string[]>([]);
+  const [name, setName] = useState(editProject?.name || '');
+  const [description, setDescription] = useState(
+    editProject?.description || '',
+  );
+  const [startDate, setStartDate] = useState(editProject?.startDate || '');
+  const [endDate, setEndDate] = useState(editProject?.endDate || '');
+  const [team, setTeam] = useState<string[]>(editProject?.team || []);
   const [startDateOpen, setStartDateOpen] = useState(false);
   const [endDateOpen, setEndDateOpen] = useState(false);
   const [selectedFile, setSelectedFile] =
-    useState<DocumentPickerResponse | null>(null);
+    useState<DocumentPickerResponse | null>(editProject?.coverImage || null);
+  const [status, setStatus] = useState(editProject?.status || '');
 
   const handleFilePick = async () => {
     try {
@@ -105,14 +112,15 @@ const AddProjectDialog = ({
                     className="text-gray-700 text-xl"
                     style={{ fontFamily: 'Poppins-Medium' }}
                   >
-                    Create New Project
+                    {editProject?.name ? 'Edit Project' : 'Create New Project'}
                   </Text>
                   <Text
                     className="text-gray-700 text-sm mt-3"
                     style={{ fontFamily: 'Poppins-Regular' }}
                   >
-                    Fill in the project details below to create a new project
-                    and start collaborating with your team
+                    {editProject?.name
+                      ? 'Update Project Details with filled fields and click submit to update the project'
+                      : 'Fill in the project details below to create a new project and start collaborating with your team'}
                   </Text>
                   <View className="w-full flex flex-col gap-y-3 mt-4">
                     <View className="w-full flex flex-col">
@@ -214,6 +222,63 @@ const AddProjectDialog = ({
                         </Text>
                       </TouchableOpacity>
                     </View>
+                    {editProject?.name && (
+                      <View className="w-full flex flex-col">
+                        <Text
+                          className="text-gray-700 text-sm mb-2"
+                          style={{ fontFamily: 'Poppins-Medium' }}
+                        >
+                          Status
+                        </Text>
+                        <Dropdown
+                          style={[
+                            tw`w-full h-[46px] p-3 py-1 flex flex-row items-center text-white border border-[1px] border-gray-200 rounded-2xl bg-white text-xs`,
+                          ]}
+                          placeholderStyle={[
+                            tw`text-[#A4A4A4] text-xs`,
+                            { fontFamily: 'Lexend-Regular' },
+                          ]}
+                          containerStyle={tw`rounded-2xl bg-white border border-gray-200 overflow-hidden`}
+                          selectedTextStyle={[
+                            tw`bg-white text-gray-700 text-xs text-left`,
+                            { fontFamily: 'Lexend-Regular' },
+                          ]}
+                          inputSearchStyle={tw`bg-white text-gray-700`}
+                          iconStyle={tw``}
+                          data={[
+                            { value: 'Active', label: 'Active' },
+                            { value: 'Completed', label: 'Completed' },
+                            { value: 'On Hold', label: 'On Hold' },
+                            { value: 'Cancelled', label: 'Cancelled' },
+                          ]}
+                          maxHeight={300}
+                          labelField="label"
+                          valueField="value"
+                          placeholder="Select Status..."
+                          searchPlaceholder="Search..."
+                          value={status}
+                          onChange={item => {
+                            console.log(item);
+                            setStatus(item);
+                          }}
+                          renderItem={item => (
+                            <View
+                              style={tw`px-4 py-3 bg-white border-b border-gray-200 bg-white`}
+                            >
+                              <Text
+                                style={[
+                                  tw`text-gray-700 text-base text-sm`,
+                                  { fontFamily: 'Poppins-Regular' },
+                                ]}
+                              >
+                                {item?.label}
+                              </Text>
+                            </View>
+                          )}
+                        />
+                      </View>
+                    )}
+
                     <View className="w-full flex flex-col">
                       <Text
                         className="text-gray-700 text-sm mb-2"
@@ -322,18 +387,23 @@ const AddProjectDialog = ({
                           </Text>
                         </TouchableOpacity>
                       </View>
-                      {selectedFile?.uri && (
-                        <View className="w-full h-[100px] object-cover rounded-2xl mt-4">
-                          <Image
-                            source={
-                              selectedFile?.uri
-                                ? { uri: selectedFile?.uri }
-                                : Password
-                            }
-                            className="w-full h-full object-cover rounded-2xl"
-                          />
-                        </View>
-                      )}
+                      {selectedFile?.uri ||
+                        (editProject?.coverImage && (
+                          <View className="w-full h-[100px] object-cover rounded-2xl mt-4">
+                            <Image
+                              source={
+                                selectedFile?.uri || editProject?.coverImage
+                                  ? {
+                                      uri:
+                                        selectedFile?.uri ||
+                                        editProject?.coverImage,
+                                    }
+                                  : Password
+                              }
+                              className="w-full h-full object-cover rounded-2xl"
+                            />
+                          </View>
+                        ))}
                     </View>
                   </View>
                   <View className="w-full flex flex-row items-center justify-end gap-2 mt-4">
@@ -351,21 +421,41 @@ const AddProjectDialog = ({
                     >
                       <Text className="text-gray-700 text-sm">Cancel</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                      className=" flex flex-row items-center gap-2 border border-gray-200 rounded-2xl p-3"
-                      onPress={() =>
-                        handleCreateProject({
-                          name,
-                          description,
-                          startDate,
-                          endDate,
-                          team,
-                          coverImage: selectedFile || null,
-                        })
-                      }
-                    >
-                      <Text className="text-gray-700 text-sm">Submit</Text>
-                    </TouchableOpacity>
+                    {editProject?.name ? (
+                      <TouchableOpacity
+                        className=" flex flex-row items-center gap-2 border border-gray-200 rounded-2xl p-3"
+                        onPress={() =>
+                          handleEditProject({
+                            _id: editProject?._id,
+                            name,
+                            description,
+                            startDate,
+                            endDate,
+                            team,
+                            coverImage: selectedFile || null,
+                            status,
+                          })
+                        }
+                      >
+                        <Text className="text-gray-700 text-sm">Submit</Text>
+                      </TouchableOpacity>
+                    ) : (
+                      <TouchableOpacity
+                        className=" flex flex-row items-center gap-2 border border-gray-200 rounded-2xl p-3"
+                        onPress={() =>
+                          handleCreateProject({
+                            name,
+                            description,
+                            startDate,
+                            endDate,
+                            team,
+                            coverImage: selectedFile || null,
+                          })
+                        }
+                      >
+                        <Text className="text-gray-700 text-sm">Submit</Text>
+                      </TouchableOpacity>
+                    )}
                   </View>
                 </View>
               </ScrollView>
@@ -376,6 +466,5 @@ const AddProjectDialog = ({
     </Modal>
   );
 };
-
 
 export default AddProjectDialog;

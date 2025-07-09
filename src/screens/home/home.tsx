@@ -26,8 +26,13 @@ import {
 import React, { useState } from 'react';
 import SwipeToAction from '../../components/SwipeToAction';
 import Quote from '../../components/quote';
+import { RootStackParamList } from '../../../App';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const Home = () => {
+  const navigation = useNavigation<NavigationProp>();
   const { user } = useSelector((state: any) => state.auth);
   const [isCheckedIn, setIsCheckedIn] = useState(false);
 

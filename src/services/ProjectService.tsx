@@ -36,6 +36,7 @@ const UpdateProject = async (id: string, payload: any) =>
     method: 'put',
     secure: true,
     data: payload,
+    files: true,
   });
 
   const GetProjectById = async (id: string) =>

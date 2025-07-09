@@ -20,6 +20,7 @@ const CreateProject = async (payload: any) =>
     method: 'post',
     secure: true,
     data: payload,
+    files: true,
   });
 
 const DeleteProject = async (id: string) =>

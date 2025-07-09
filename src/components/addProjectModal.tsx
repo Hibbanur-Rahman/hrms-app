@@ -15,13 +15,10 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import { useSelector } from 'react-redux';
-import ProjectService from '../services/ProjectService';
-import { Calendar, User2 } from 'lucide-react-native';
+
 import { formatDate } from '../utils/dateTimeFormater';
 import DatePicker from 'react-native-date-picker';
 import tw from 'twrnc';
-import { useFocusEffect } from '@react-navigation/native';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import DocumentPicker, {
   DocumentPickerResponse,

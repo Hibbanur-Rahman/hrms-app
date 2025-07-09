@@ -6,28 +6,14 @@ import {
   TouchableOpacity,
   TextInput,
   ImageBackground,
-  FlatList,
   ScrollView,
-  ActivityIndicator,
-  Modal,
-  Image,
-  Alert,
-  TouchableWithoutFeedback,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import { useSelector } from 'react-redux';
 import ProjectService from '../../services/ProjectService';
 import { ArrowLeft, Bell, Calendar, User2 } from 'lucide-react-native';
 import { formatDate } from '../../utils/dateTimeFormater';
-import DatePicker from 'react-native-date-picker';
-import tw from 'twrnc';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { MultiSelect } from 'react-native-element-dropdown';
-import DocumentPicker, {
-  DocumentPickerResponse,
-  pick,
-  types,
-} from '@react-native-documents/picker';
 import AddProjectDialog from '../../components/addProjectModal';
 import { RootStackParamList } from '../../../App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';

@@ -1,4 +1,19 @@
-import { ArrowLeft, Bell, Calendar, Search, Filter, Clock, User, Mail, Phone, Calendar as CalendarIcon, CheckCircle, XCircle, Clock as ClockIcon, File } from 'lucide-react-native';
+import {
+  ArrowLeft,
+  Bell,
+  Calendar,
+  Search,
+  Filter,
+  Clock,
+  User,
+  Mail,
+  Phone,
+  Calendar as CalendarIcon,
+  CheckCircle,
+  XCircle,
+  Clock as ClockIcon,
+  File,
+} from 'lucide-react-native';
 import {
   View,
   Text,
@@ -25,12 +40,16 @@ import Animated, {
   withTiming,
   interpolate,
   runOnJS,
+  FadeIn,
   FadeInUp,
   FadeInDown,
   SlideInRight,
   Layout,
 } from 'react-native-reanimated';
 import { format, parseISO } from 'date-fns';
+import AddLeaveApplicationModal from '../../components/addLeaveApplicationModal';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import Feather from 'react-native-vector-icons/Feather';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -48,11 +67,13 @@ const Leaves = () => {
   const { user } = useSelector((state: any) => state.auth);
   const [selectedMonth, setSelectedMonth] = useState<any>(null);
   const [selectedYear, setSelectedYear] = useState<any>(null);
-
+  const [addLeaveApplicationModalVisible, setAddLeaveApplicationModalVisible] =
+    useState(false);
   // Animation values
   const headerOpacity = useSharedValue(0);
   const filterScale = useSharedValue(0.8);
   const searchOpacity = useSharedValue(0);
+  const fabScale = useSharedValue(0);
 
   //months
   const months = [
@@ -113,7 +134,7 @@ const Leaves = () => {
       headerOpacity.value = withSpring(1, { damping: 15, stiffness: 100 });
       filterScale.value = withSpring(1, { damping: 15, stiffness: 100 });
       searchOpacity.value = withTiming(1, { duration: 800 });
-      
+
       handleGetLeaves();
     }, [selectedMonth, selectedYear]),
   );
@@ -121,7 +142,9 @@ const Leaves = () => {
   // Animated styles
   const headerAnimatedStyle = useAnimatedStyle(() => ({
     opacity: headerOpacity.value,
-    transform: [{ translateY: interpolate(headerOpacity.value, [0, 1], [20, 0]) }],
+    transform: [
+      { translateY: interpolate(headerOpacity.value, [0, 1], [20, 0]) },
+    ],
   }));
 
   const filterAnimatedStyle = useAnimatedStyle(() => ({
@@ -130,7 +153,9 @@ const Leaves = () => {
 
   const searchAnimatedStyle = useAnimatedStyle(() => ({
     opacity: searchOpacity.value,
-    transform: [{ translateX: interpolate(searchOpacity.value, [0, 1], [50, 0]) }],
+    transform: [
+      { translateX: interpolate(searchOpacity.value, [0, 1], [50, 0]) },
+    ],
   }));
 
   const getStatusColor = (status: string) => {
@@ -167,7 +192,40 @@ const Leaves = () => {
     }
   };
 
-  const LeaveCard = ({ leave, index }: { 
+  const fabAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: fabScale.value }],
+  }));
+
+  // Animated Button Component
+  const AnimatedButton = ({ children, onPress, style, ...props }: any) => {
+    const scale = useSharedValue(1);
+
+    const animatedStyle = useAnimatedStyle(() => ({
+      transform: [{ scale: scale.value }],
+    }));
+
+    const gesture = Gesture.Tap()
+      .onBegin(() => {
+        scale.value = withTiming(0.95, { duration: 100 });
+      })
+      .onFinalize(() => {
+        scale.value = withTiming(1, { duration: 100 });
+        runOnJS(onPress)();
+      });
+
+    return (
+      <GestureDetector gesture={gesture}>
+        <Animated.View style={[animatedStyle, style]} {...props}>
+          {children}
+        </Animated.View>
+      </GestureDetector>
+    );
+  };
+
+  const LeaveCard = ({
+    leave,
+    index,
+  }: {
     leave: {
       applyDate: string;
       approvedDate: string;
@@ -191,7 +249,7 @@ const Leaves = () => {
     index: number;
   }) => {
     const statusColors = getStatusColor(leave.status);
-    
+
     return (
       <Animated.View
         entering={FadeInUp.delay(index * 100).springify()}
@@ -208,22 +266,28 @@ const Leaves = () => {
         {/* Header with status */}
         <View className="flex-row justify-between items-start mb-3">
           <View className="flex-1">
-            <Text className="text-lg font-semibold text-gray-900 mb-1" style={{ fontFamily: 'Poppins-SemiBold' }}>
+            <Text
+              className="text-lg font-semibold text-gray-900 mb-1"
+              style={{ fontFamily: 'Poppins-SemiBold' }}
+            >
               {leave.name}
             </Text>
             <View className="flex-row items-center gap-2">
               <User size={14} color="#6b7280" />
-              <Text className="text-sm text-gray-600" style={{ fontFamily: 'Poppins-Regular' }}>
+              <Text
+                className="text-sm text-gray-600"
+                style={{ fontFamily: 'Poppins-Regular' }}
+              >
                 {leave.employeeId}
               </Text>
             </View>
           </View>
-          <View 
+          <View
             className="px-3 py-1 rounded-full flex-row items-center gap-1"
             style={{ backgroundColor: statusColors.bg }}
           >
             {getStatusIcon(leave.status)}
-            <Text 
+            <Text
               className="text-xs font-medium"
               style={{ color: statusColors.text, fontFamily: 'Poppins-Medium' }}
             >
@@ -236,13 +300,19 @@ const Leaves = () => {
         <View className="flex-row items-center gap-4 mb-3">
           <View className="flex-row items-center gap-2">
             <Mail size={14} color="#6b7280" />
-            <Text className="text-sm text-gray-600" style={{ fontFamily: 'Poppins-Regular' }}>
+            <Text
+              className="text-sm text-gray-600"
+              style={{ fontFamily: 'Poppins-Regular' }}
+            >
               {leave.email}
             </Text>
           </View>
           <View className="flex-row items-center gap-2">
             <Phone size={14} color="#6b7280" />
-            <Text className="text-sm text-gray-600" style={{ fontFamily: 'Poppins-Regular' }}>
+            <Text
+              className="text-sm text-gray-600"
+              style={{ fontFamily: 'Poppins-Regular' }}
+            >
               {leave.mobile}
             </Text>
           </View>
@@ -253,20 +323,29 @@ const Leaves = () => {
           <View className="flex-row items-center justify-between">
             <View className="flex-row items-center gap-2">
               <CalendarIcon size={16} color="#3b82f6" />
-              <Text className="text-sm font-medium text-gray-700" style={{ fontFamily: 'Poppins-Medium' }}>
+              <Text
+                className="text-sm font-medium text-gray-700"
+                style={{ fontFamily: 'Poppins-Medium' }}
+              >
                 From: {formatDate(leave.fromDate)}
               </Text>
             </View>
             <View className="flex-row items-center gap-2">
               <CalendarIcon size={16} color="#3b82f6" />
-              <Text className="text-sm font-medium text-gray-700" style={{ fontFamily: 'Poppins-Medium' }}>
+              <Text
+                className="text-sm font-medium text-gray-700"
+                style={{ fontFamily: 'Poppins-Medium' }}
+              >
                 To: {formatDate(leave.toDate)}
               </Text>
             </View>
           </View>
           <View className="flex-row items-center gap-2 mt-2">
             <Clock size={14} color="#6b7280" />
-            <Text className="text-sm text-gray-600" style={{ fontFamily: 'Poppins-Regular' }}>
+            <Text
+              className="text-sm text-gray-600"
+              style={{ fontFamily: 'Poppins-Regular' }}
+            >
               {leave.leaveDays} day(s)
             </Text>
           </View>
@@ -275,12 +354,21 @@ const Leaves = () => {
         {/**file */}
         {leave.fileUrl && (
           <View className="mb-3">
-            <Text className="text-sm font-medium text-gray-700 mb-1" style={{ fontFamily: 'Poppins-Medium' }}>
+            <Text
+              className="text-sm font-medium text-gray-700 mb-1"
+              style={{ fontFamily: 'Poppins-Medium' }}
+            >
               File:
             </Text>
-            <TouchableOpacity onPress={() => Linking.openURL(leave.fileUrl)} className='flex-row items-center gap-2'>
+            <TouchableOpacity
+              onPress={() => Linking.openURL(leave.fileUrl)}
+              className="flex-row items-center gap-2"
+            >
               <File size={16} color="#3b82f6" />
-              <Text className="text-sm text-blue-600" style={{ fontFamily: 'Poppins-Medium' }}>
+              <Text
+                className="text-sm text-blue-600"
+                style={{ fontFamily: 'Poppins-Medium' }}
+              >
                 View File
               </Text>
             </TouchableOpacity>
@@ -290,10 +378,16 @@ const Leaves = () => {
         {/* Reason */}
         {leave.reason && (
           <View className="mb-3">
-            <Text className="text-sm font-medium text-gray-700 mb-1" style={{ fontFamily: 'Poppins-Medium' }}>
+            <Text
+              className="text-sm font-medium text-gray-700 mb-1"
+              style={{ fontFamily: 'Poppins-Medium' }}
+            >
               Reason:
             </Text>
-            <Text className="text-sm text-gray-600 leading-5" style={{ fontFamily: 'Poppins-Regular' }}>
+            <Text
+              className="text-sm text-gray-600 leading-5"
+              style={{ fontFamily: 'Poppins-Regular' }}
+            >
               {leave.reason}
             </Text>
           </View>
@@ -301,11 +395,17 @@ const Leaves = () => {
 
         {/* Footer */}
         <View className="flex-row justify-between items-center pt-3 border-t border-gray-100">
-          <Text className="text-xs text-gray-500" style={{ fontFamily: 'Poppins-Regular' }}>
+          <Text
+            className="text-xs text-gray-500"
+            style={{ fontFamily: 'Poppins-Regular' }}
+          >
             Applied: {formatDate(leave.applyDate)}
           </Text>
           {leave.approverName && (
-            <Text className="text-xs text-gray-500" style={{ fontFamily: 'Poppins-Regular' }}>
+            <Text
+              className="text-xs text-gray-500"
+              style={{ fontFamily: 'Poppins-Regular' }}
+            >
               Approved by: {leave.approverName}
             </Text>
           )}
@@ -316,10 +416,7 @@ const Leaves = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-white">
-      <Animated.View 
-        className="flex-1"
-        style={headerAnimatedStyle}
-      >
+      <Animated.View className="flex-1" style={headerAnimatedStyle}>
         {/* Header */}
         <View className="bg-white px-4 py-3 border-b border-gray-100">
           <View className="flex-row items-center justify-between">
@@ -342,20 +439,15 @@ const Leaves = () => {
           </View>
         </View>
 
-        <ScrollView 
+        <ScrollView
           className="flex-1 px-4"
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
           }
           showsVerticalScrollIndicator={false}
         >
-          
-
           {/* Filters */}
-          <Animated.View 
-            className="mt-4"
-            style={filterAnimatedStyle}
-          >
+          <Animated.View className="mt-4" style={filterAnimatedStyle}>
             <View className="flex-row items-center gap-3">
               <View className="flex-1">
                 <Dropdown
@@ -372,7 +464,11 @@ const Leaves = () => {
                   data={months}
                   maxHeight={300}
                   renderLeftIcon={() => (
-                    <Calendar size={18} color="#6b7280" style={{ marginRight: 8 }} />
+                    <Calendar
+                      size={18}
+                      color="#6b7280"
+                      style={{ marginRight: 8 }}
+                    />
                   )}
                   labelField="label"
                   valueField="value"
@@ -381,7 +477,10 @@ const Leaves = () => {
                   onChange={item => setSelectedMonth(item)}
                   renderItem={item => (
                     <View className="px-4 py-3 border-b border-gray-100">
-                      <Text className="text-gray-700 text-sm" style={{ fontFamily: 'Poppins-Regular' }}>
+                      <Text
+                        className="text-gray-700 text-sm"
+                        style={{ fontFamily: 'Poppins-Regular' }}
+                      >
                         {item?.label}
                       </Text>
                     </View>
@@ -403,7 +502,11 @@ const Leaves = () => {
                   data={years}
                   maxHeight={300}
                   renderLeftIcon={() => (
-                    <Calendar size={18} color="#6b7280" style={{ marginRight: 8 }} />
+                    <Calendar
+                      size={18}
+                      color="#6b7280"
+                      style={{ marginRight: 8 }}
+                    />
                   )}
                   labelField="label"
                   valueField="value"
@@ -412,7 +515,10 @@ const Leaves = () => {
                   onChange={item => setSelectedYear(item)}
                   renderItem={item => (
                     <View className="px-4 py-3 border-b border-gray-100">
-                      <Text className="text-gray-700 text-sm" style={{ fontFamily: 'Poppins-Regular' }}>
+                      <Text
+                        className="text-gray-700 text-sm"
+                        style={{ fontFamily: 'Poppins-Regular' }}
+                      >
                         {item?.label}
                       </Text>
                     </View>
@@ -421,17 +527,59 @@ const Leaves = () => {
               </View>
             </View>
           </Animated.View>
-
-          
+          {/**add leaves */}
+          <Animated.View
+            entering={FadeInDown.delay(300)}
+            className="w-full flex flex-row items-center justify-between mt-4"
+          >
+            <View className="flex-row items-center gap-2">
+              <Text
+                className="text-gray-700 text-sm"
+                style={{ fontFamily: 'Poppins-Medium' }}
+              >
+                Leaves Requested
+              </Text>
+              <Animated.View
+                entering={FadeIn.delay(400)}
+                className="bg-indigo-100 rounded-full px-2 py-1"
+              >
+                <Text
+                  className="text-indigo-700 text-xs font-medium"
+                  style={{ fontFamily: 'Poppins-Medium' }}
+                >
+                  {leaves?.length || 0}
+                </Text>
+              </Animated.View>
+            </View>
+            <Animated.View style={fabAnimatedStyle}>
+              <AnimatedButton
+                className="flex-row items-center gap-2 !bg-indigo-600 rounded-2xl px-4 py-2 shadow-lg"
+                onPress={() => {
+                  setAddLeaveApplicationModalVisible(true);
+                }}
+              >
+                <Feather name="plus" size={20} color="white" />
+                <Text
+                  className="text-white text-sm font-medium"
+                  style={{ fontFamily: 'Poppins-Medium' }}
+                >
+                  Add Leave
+                </Text>
+              </AnimatedButton>
+            </Animated.View>
+          </Animated.View>
 
           {/* Leaves List */}
           <View className="mt-6 pb-6">
             {loading && (
-              <Animated.View 
+              <Animated.View
                 entering={FadeInUp.springify()}
                 className="w-full items-center py-8"
               >
-                <Text className="text-gray-500 text-sm" style={{ fontFamily: 'Poppins-Regular' }}>
+                <Text
+                  className="text-gray-500 text-sm"
+                  style={{ fontFamily: 'Poppins-Regular' }}
+                >
                   Loading leaves...
                 </Text>
               </Animated.View>
@@ -446,16 +594,22 @@ const Leaves = () => {
             )}
 
             {!loading && Array.isArray(leaves) && leaves.length === 0 && (
-              <Animated.View 
+              <Animated.View
                 entering={FadeInUp.delay(300).springify()}
                 className="w-full items-center py-12"
               >
                 <View className="items-center">
                   <Calendar size={48} color="#d1d5db" />
-                  <Text className="text-gray-500 text-base mt-3" style={{ fontFamily: 'Poppins-Medium' }}>
+                  <Text
+                    className="text-gray-500 text-base mt-3"
+                    style={{ fontFamily: 'Poppins-Medium' }}
+                  >
                     No leaves found
                   </Text>
-                  <Text className="text-gray-400 text-sm mt-1 text-center" style={{ fontFamily: 'Poppins-Regular' }}>
+                  <Text
+                    className="text-gray-400 text-sm mt-1 text-center"
+                    style={{ fontFamily: 'Poppins-Regular' }}
+                  >
                     Try adjusting your filters or check back later
                   </Text>
                 </View>
@@ -463,11 +617,14 @@ const Leaves = () => {
             )}
 
             {error && (
-              <Animated.View 
+              <Animated.View
                 entering={FadeInUp.springify()}
                 className="w-full items-center py-8"
               >
-                <Text className="text-red-500 text-sm" style={{ fontFamily: 'Poppins-Regular' }}>
+                <Text
+                  className="text-red-500 text-sm"
+                  style={{ fontFamily: 'Poppins-Regular' }}
+                >
                   {error}
                 </Text>
               </Animated.View>
@@ -475,6 +632,12 @@ const Leaves = () => {
           </View>
         </ScrollView>
       </Animated.View>
+      {addLeaveApplicationModalVisible && (
+        <AddLeaveApplicationModal
+          modalVisible={addLeaveApplicationModalVisible}
+          setModalVisible={setAddLeaveApplicationModalVisible}
+        />
+      )}
     </SafeAreaView>
   );
 };

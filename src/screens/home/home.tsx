@@ -10,6 +10,7 @@ import logo from '../../assets/images/userImg.jpg';
 import { useSelector } from 'react-redux';
 import Feather from 'react-native-vector-icons/Feather';
 import {
+  Bell,
   Calendar,
   CalendarRange,
   ChevronRight,
@@ -54,7 +55,7 @@ const Home = () => {
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="flex-1 justify-center items-center px-4 py-3">
           {/** header */}
-          <View className="flex-row items-center justify-between w-full">
+          <View className="flex-row items-center justify-between w-full ">
             <View className="flex-row items-center gap-2">
               <Image
                 source={user?.profileImage ? { uri: user?.profileImage } : logo}
@@ -77,7 +78,7 @@ const Home = () => {
             </View>
             <View>
               <TouchableOpacity className="p-2 rounded-full border border-gray-300">
-                <Feather name="bell" size={24} color="gray" />
+                <Bell size={20} color="#374151" />
               </TouchableOpacity>
             </View>
           </View>
@@ -215,7 +216,7 @@ const Home = () => {
               <View className="w-full flex flex-row  justify-between items-center p-2 border border-gray-200 rounded-2xl">
                 <View className="flex-row items-center gap-2">
                   <View className="p-3 rounded-full bg-violet-200">
-                    <FileDigit size={30} color="#5658e6"  />
+                    <FileDigit size={30} color="#5658e6" />
                   </View>
                   <View>
                     <Text

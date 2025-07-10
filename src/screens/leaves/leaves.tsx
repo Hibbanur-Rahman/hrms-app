@@ -50,6 +50,7 @@ import { format, parseISO } from 'date-fns';
 import AddLeaveApplicationModal from '../../components/addLeaveApplicationModal';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Feather from 'react-native-vector-icons/Feather';
+import LeaveSkeleton from '../../components/LeaveSkeleton';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
@@ -220,6 +221,22 @@ const Leaves = () => {
         </Animated.View>
       </GestureDetector>
     );
+  };
+
+  const handleSubmit = async (payload: any) => {
+    try {
+      setLoading(true);
+      const response = await LeaveService.CreateLeave(payload);
+      console.log(response);
+      if (response.status === 201) {
+        handleGetLeaves();
+        setAddLeaveApplicationModalVisible(false);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const LeaveCard = ({
@@ -551,22 +568,20 @@ const Leaves = () => {
                 </Text>
               </Animated.View>
             </View>
-            <Animated.View style={fabAnimatedStyle}>
-              <AnimatedButton
-                className="flex-row items-center gap-2 !bg-indigo-600 rounded-2xl px-4 py-2 shadow-lg"
-                onPress={() => {
-                  setAddLeaveApplicationModalVisible(true);
-                }}
+            <TouchableOpacity
+              className="flex-row items-center gap-2 bg-indigo-600 rounded-2xl px-4 py-2 shadow-lg"
+              onPress={() => {
+                setAddLeaveApplicationModalVisible(true);
+              }}
+            >
+              <Feather name="plus" size={20} color="white" />
+              <Text
+                className="text-white text-sm font-medium"
+                style={{ fontFamily: 'Poppins-Medium' }}
               >
-                <Feather name="plus" size={20} color="white" />
-                <Text
-                  className="text-white text-sm font-medium"
-                  style={{ fontFamily: 'Poppins-Medium' }}
-                >
-                  Add Leave
-                </Text>
-              </AnimatedButton>
-            </Animated.View>
+                Add Leave
+              </Text>
+            </TouchableOpacity>
           </Animated.View>
 
           {/* Leaves List */}
@@ -574,14 +589,9 @@ const Leaves = () => {
             {loading && (
               <Animated.View
                 entering={FadeInUp.springify()}
-                className="w-full items-center py-8"
+                className="w-full"
               >
-                <Text
-                  className="text-gray-500 text-sm"
-                  style={{ fontFamily: 'Poppins-Regular' }}
-                >
-                  Loading leaves...
-                </Text>
+                <LeaveSkeleton count={3} />
               </Animated.View>
             )}
 
@@ -634,6 +644,9 @@ const Leaves = () => {
       </Animated.View>
       {addLeaveApplicationModalVisible && (
         <AddLeaveApplicationModal
+          handleSubmit={handleSubmit}
+          loading={loading}
+          setLoading={setLoading}
           modalVisible={addLeaveApplicationModalVisible}
           setModalVisible={setAddLeaveApplicationModalVisible}
         />

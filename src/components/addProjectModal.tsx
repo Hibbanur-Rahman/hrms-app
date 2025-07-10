@@ -405,7 +405,7 @@ const AddProjectDialog = ({
                   </View>
                   <View className="w-full flex flex-row items-center justify-end gap-2 mt-4">
                     <TouchableOpacity
-                      className=" flex flex-row items-center gap-2 border border-gray-200 rounded-2xl p-3"
+                      className=" flex flex-row items-center gap-2 border border-gray-200 rounded-xl p-3 px-8"
                       onPress={() => {
                         setIsCreateDialogOpen(false);
                         setName('');
@@ -420,7 +420,7 @@ const AddProjectDialog = ({
                     </TouchableOpacity>
                     {editProject?.name ? (
                       <TouchableOpacity
-                        className=" flex flex-row items-center gap-2 border border-gray-200 rounded-2xl p-3"
+                        className=" flex flex-row items-center gap-2 border border-gray-200 rounded-xl p-3 px-8"
                         onPress={() =>
                           handleEditProject({
                             _id: editProject?._id,
@@ -438,7 +438,7 @@ const AddProjectDialog = ({
                       </TouchableOpacity>
                     ) : (
                       <TouchableOpacity
-                        className=" flex flex-row items-center gap-2 border border-gray-200 rounded-2xl p-3"
+                        className=" flex flex-row items-center gap-2 border border-gray-200 rounded-xl p-3 px-8"
                         onPress={() =>
                           handleCreateProject({
                             name,

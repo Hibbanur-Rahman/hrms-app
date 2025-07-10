@@ -56,7 +56,12 @@ const Home = () => {
         <View className="flex-1 justify-center items-center px-4 py-3">
           {/** header */}
           <View className="flex-row items-center justify-between w-full ">
-            <View className="flex-row items-center gap-2">
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate('Layout', { screen: 'Profile' } as any)
+              }
+              className="flex-row items-center gap-2"
+            >
               <Image
                 source={user?.profileImage ? { uri: user?.profileImage } : logo}
                 className="w-16 h-16 rounded-full"
@@ -75,9 +80,12 @@ const Home = () => {
                   {user?.designation}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
             <View>
-              <TouchableOpacity className="p-2 rounded-full border border-gray-300">
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Notification')}
+                className="p-2 rounded-full border border-gray-300"
+              >
                 <Bell size={20} color="#374151" />
               </TouchableOpacity>
             </View>
@@ -312,7 +320,11 @@ const Home = () => {
               >
                 Leave History
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Layout', { screen: 'Leaves' } as any)
+                }
+              >
                 <Text
                   className="text-blue-800"
                   style={{ fontFamily: 'Poppins-Medium' }}
@@ -412,7 +424,11 @@ const Home = () => {
               >
                 Attendance History
               </Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate('Layout', { screen: 'Attendance' } as any)
+                }
+              >
                 <Text
                   className="text-blue-800"
                   style={{ fontFamily: 'Poppins-Medium' }}

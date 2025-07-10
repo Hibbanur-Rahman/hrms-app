@@ -7,7 +7,7 @@ import {
   ScrollView,
   Animated,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import {
@@ -23,7 +23,7 @@ import {
 } from 'lucide-react-native';
 import AttendanceService from '../../services/AttendanceService';
 import { useSelector } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import tw from 'twrnc';
@@ -96,9 +96,11 @@ const Attendance = () => {
       setLoading(false);
     }
   };
-  useEffect(() => {
-    handleGetAttendanceList();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      handleGetAttendanceList();
+    }, []),
+  );
 
   //animated styles
   const filterAnimatedStyle = useAnimatedStyle(() => ({
@@ -123,7 +125,7 @@ const Attendance = () => {
             >
               Attendance
             </Text>
-            <TouchableOpacity className="bg-gray-100 rounded-full p-2">
+            <TouchableOpacity className="bg-gray-100 rounded-full p-2" onPress={() => navigation.navigate('Notification')}>
               <Bell size={20} color="#374151" />
             </TouchableOpacity>
           </View>

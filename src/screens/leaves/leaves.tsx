@@ -450,7 +450,10 @@ const Leaves = () => {
             >
               Leave Applications
             </Text>
-            <TouchableOpacity className="bg-gray-100 rounded-full p-2">
+            <TouchableOpacity
+              className="bg-gray-100 rounded-full p-2"
+              onPress={() => navigation.navigate('Notification')}
+            >
               <Bell size={20} color="#374151" />
             </TouchableOpacity>
           </View>

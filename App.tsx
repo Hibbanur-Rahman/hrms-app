@@ -20,6 +20,7 @@ import StartScreen from './src/screens/auth/startScreens';
 import Layout from './src/layout/dashboardLayout';
 import ForgotPassword from './src/screens/auth/forgotPassword';
 import AuthService from './src/services/AuthService';
+import Notification from './src/screens/notification/notification';
 
 
 enableScreens();
@@ -30,6 +31,7 @@ export type RootStackParamList = {
   StartScreen: undefined;
   Layout: undefined;
   ForgotPassword: undefined;
+  Notification: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -82,6 +84,8 @@ function AppContent() {
         <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
         <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
         <Stack.Screen name="Layout" component={Layout} options={{ headerShown: false }} />
+
+        <Stack.Screen name="Notification" component={Notification} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

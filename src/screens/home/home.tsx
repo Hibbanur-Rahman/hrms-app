@@ -30,6 +30,7 @@ import Quote from '../../components/quote';
 import { RootStackParamList } from '../../../App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
+import { add } from '@hibbanur-rahman/sum-package';
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const Home = () => {
@@ -50,6 +51,7 @@ const Home = () => {
   };
 
   console.log(user);
+  console.log(add(1, 2));
   return (
     <SafeAreaView className="flex-1 bg-white">
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>

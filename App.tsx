@@ -21,6 +21,10 @@ import Layout from './src/layout/dashboardLayout';
 import ForgotPassword from './src/screens/auth/forgotPassword';
 import AuthService from './src/services/AuthService';
 import Notification from './src/screens/notification/notification';
+import ProfileView from './src/screens/profile/profileView';
+import Settings from './src/screens/profile/settings';
+import StudentPortal from './src/screens/profile/studentPortal';
+import SalarySlips from './src/screens/profile/salarySlips';
 
 
 enableScreens();
@@ -32,6 +36,10 @@ export type RootStackParamList = {
   Layout: undefined;
   ForgotPassword: undefined;
   Notification: undefined;
+  ProfileView: undefined;
+  Settings: undefined;
+  StudentPortal: undefined;
+  SalarySlips: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -86,6 +94,10 @@ function AppContent() {
         <Stack.Screen name="Layout" component={Layout} options={{ headerShown: false }} />
 
         <Stack.Screen name="Notification" component={Notification} options={{ headerShown: false }} />
+        <Stack.Screen name="ProfileView" component={ProfileView} options={{ headerShown: false }} />
+        <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
+        <Stack.Screen name="StudentPortal" component={StudentPortal} options={{ headerShown: false }} />
+        <Stack.Screen name="SalarySlips" component={SalarySlips} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

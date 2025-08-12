@@ -42,11 +42,18 @@ const CheckOut = async (payload: any) =>
    
   })
 
+  const AttendanceCount=async(id:any,month:any,year:any)=>Request({
+    url:`attendance-count/${id}?month=${month}&year=${year}`,
+    method:'GET',
+    secure:true,
+  })
+
 const AttendanceService = {
   GetAttendanceList,
   CheckIn,
   CheckOut,
   GetTodayAttendance,
+  AttendanceCount,
 };
 
 export default AttendanceService;

@@ -5,7 +5,7 @@ import { Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
-import API_URL from "../../environmentVariables";
+import { ENV } from "./env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Request = async (httpOptions: any) => {
@@ -14,7 +14,7 @@ const Request = async (httpOptions: any) => {
 
   const token = await AsyncStorage.getItem("access_token");
   if (!httpOptions.exact) {
-    httpOptions.url = API_URL + "/" + httpOptions.url;
+    httpOptions.url = ENV.API_URL + "/" + httpOptions.url;
     console.log("http header:", httpOptions);
   }
   httpOptions.headers = {

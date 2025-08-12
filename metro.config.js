@@ -5,13 +5,22 @@ const { wrapWithReanimatedMetroConfig } = require('react-native-reanimated/metro
 // Get base config
 const baseConfig = getDefaultConfig(__dirname);
 
-// Customize asset extensions
+// Customize asset extensions and resolver
 const customConfig = {
   resolver: {
     assetExts: [
       'png', 'jpg', 'jpeg', 'svg', 'gif',
       'webp', 'ttf', 'otf',
     ],
+    sourceExts: ['js', 'json', 'ts', 'tsx', 'jsx'],
+  },
+  transformer: {
+    getTransformOptions: async () => ({
+      transform: {
+        experimentalImportSupport: false,
+        inlineRequires: true,
+      },
+    }),
   },
 };
 

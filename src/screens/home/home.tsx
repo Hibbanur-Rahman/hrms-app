@@ -24,36 +24,238 @@ import {
   Timer,
   Watch,
 } from 'lucide-react-native';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import SwipeToAction from '../../components/SwipeToAction';
 import Quote from '../../components/quote';
 import { RootStackParamList } from '../../../App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { add } from '@hibbanur-rahman/sum-package';
+import AttendanceService from '../../services/AttendanceService';
+import LocationService from '../../services/LocationService';
+import { Alert } from 'react-native';
+import LocationTest from '../../components/LocationTest';
+import CheckInLoadingModal from '../../components/CheckInLoadingModal';
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const Home = () => {
   const navigation = useNavigation<NavigationProp>();
   const { user } = useSelector((state: any) => state.auth);
   const [isCheckedIn, setIsCheckedIn] = useState(false);
+  const [showLoadingModal, setShowLoadingModal] = useState(false);
+  const [loadingType, setLoadingType] = useState<'checkin' | 'checkout'>(
+    'checkin',
+  );
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [todayAttendance, setTodayAttendance] = useState(null);
+  const [checkInTime, setCheckInTime] = useState('');
+  const [checkOutTime, setCheckOutTime] = useState('');
+  const [checkInLocation, setCheckInLocation] = useState('');
+  const [checkOutLocation, setCheckOutLocation] = useState('');
+  const [isCheckedOut, setIsCheckedOut] = useState(false);
+  const [isOnLeave, setIsOnLeave] = useState(false);
 
-  const handleCheckIn = () => {
-    setIsCheckedIn(true);
-    // Add your check-in logic here
-    console.log('Checked in!');
+  const handleCheckIn = async () => {
+    try {
+      setLoadingType('checkin');
+      setShowLoadingModal(true);
+      setIsProcessing(true);
+      setIsCheckedIn(true);
+
+      // Get location with address
+      const locationData = await LocationService.getLocationWithAddress();
+      console.log('locationData', locationData);
+      const payload = {
+        address: locationData.address || 'Address not available',
+        latitude: locationData.latitude,
+        longitude: locationData.longitude,
+      };
+
+      console.log('Checked in with location:', payload);
+      const response = await AttendanceService.CheckIn(payload);
+
+      if (response.status === 201) {
+        setIsProcessing(false);
+        setIsCheckedIn(true);
+        // Modal will handle the completion animation
+        // The onComplete callback will be called when animation finishes
+      }
+    } catch (error) {
+      setShowLoadingModal(false);
+      setIsProcessing(false);
+      setIsCheckedIn(false);
+      console.log('Error checking in:', error);
+      Alert.alert(
+        'Failed to check-in',
+        (error as any)?.data?.message ||
+          (error as any)?.message ||
+          'Unknown error',
+      );
+    }
   };
 
-  const handleCheckOut = () => {
+  const handleCheckInComplete = () => {
+    setShowLoadingModal(false);
+    Alert.alert(
+      'Check-in Successful',
+      'Your attendance has been recorded successfully!',
+      [{ text: 'OK' }],
+    );
     setIsCheckedIn(false);
-    // Add your check-out logic here
-    console.log('Checked out!');
   };
 
+  const handleCheckOut = async () => {
+    try {
+      setLoadingType('checkout');
+      setShowLoadingModal(true);
+      setIsProcessing(true);
+
+      // Get location with address for check-out
+      const locationData = await LocationService.getLocationWithAddress();
+
+      const payload = {
+        address: locationData.address || 'Address not available',
+        latitude: locationData.latitude,
+        longitude: locationData.longitude,
+      };
+
+      const response = await AttendanceService.CheckOut(payload);
+      setIsCheckedIn(false);
+      console.log('Checked out with location:', payload);
+
+      setIsProcessing(false);
+      
+    } catch (error) {
+      setShowLoadingModal(false);
+      setIsProcessing(false);
+      console.log('Error checking out:', error);
+
+      Alert.alert(
+        'Check-out Failed',
+        'Unable to get your location. Please ensure location permissions are enabled.',
+        [{ text: 'OK' }],
+      );
+    }
+  };
+
+  const handleCheckOutComplete = () => {
+    setShowLoadingModal(false);
+    Alert.alert(
+      'Check-out Successful',
+      'Your attendance has been recorded successfully!',
+      [{ text: 'OK' }],
+    );
+  };
+
+  const handleFetchTodayAttendance = async () => {
+    try {
+      const response = await AttendanceService.GetTodayAttendance(user?._id);
+      if (response.status === 200) {
+        console.log('today attendance', response.data);
+        setTodayAttendance(response.data?.data);
+        const todayData = response.data?.data;
+        if (todayData) {
+          console.log("Today's attendance data:", todayData);
+
+          // Set check-in status if checked in
+          if (todayData.checkIn && todayData.checkIn.time) {
+            setIsCheckedIn(true);
+            setCheckInTime(
+              new Date(todayData.checkIn.time).toLocaleTimeString(),
+            );
+            setCheckInLocation(
+              todayData.checkIn.location?.address || 'Unknown location',
+            );
+
+            if (!todayData.checkOut || !todayData.checkOut.time) {
+              // Check-in status is set via isCheckedIn state
+            }
+          } else {
+            setIsCheckedIn(false);
+            setCheckInTime('');
+            setCheckInLocation('');
+          }
+
+          // Set check-out status if checked out
+          if (todayData.checkOut && todayData.checkOut.time) {
+            setIsCheckedOut(true);
+            // Convert UTC time to local time with AM/PM format
+            const localTime = new Date(
+              todayData.checkOut.time,
+            ).toLocaleTimeString('en-US', {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+            });
+            setCheckOutTime(localTime);
+
+            // Handle auto-checkout specifically
+            if (todayData.checkOut.isAutoCheckout) {
+              setCheckOutLocation('Auto Checkout (System)');
+            } else {
+              setCheckOutLocation(
+                todayData.checkOut.location?.address || 'Unknown location',
+              );
+            }
+          } else {
+            setIsCheckedOut(false);
+            setCheckOutTime('');
+            setCheckOutLocation('');
+          }
+
+          // Set leave status if on leave
+          if (
+            todayData.status === 'Leave' ||
+            (todayData.status === 'Absent' &&
+              todayData.checkIn &&
+              todayData.checkIn.location &&
+              todayData.checkIn.location.address === 'On Leave')
+          ) {
+            setIsOnLeave(true);
+          } else {
+            setIsOnLeave(false);
+          }
+        } else {
+          // Reset all states if no record found
+          setIsCheckedIn(false);
+          setIsCheckedOut(false);
+          setIsOnLeave(false);
+          setCheckInTime('');
+          setCheckOutTime('');
+          setCheckInLocation('');
+          setCheckOutLocation('');
+        }
+      }
+    } catch (error) {
+      console.log('error while fetch today attendance', error);
+      Alert.alert(
+        'Error',
+        "Failed to fetch today's attendance. Please try again later.",
+      );
+    }
+  };
   console.log(user);
   console.log(add(1, 2));
+  useFocusEffect(
+    useCallback(() => {
+      handleFetchTodayAttendance();
+    }, []),
+  );
   return (
     <SafeAreaView className="flex-1 bg-white">
+      {/* Loading Modal */}
+      <CheckInLoadingModal
+        visible={showLoadingModal}
+        type={loadingType}
+        onClose={() => setShowLoadingModal(false)}
+        onComplete={
+          loadingType === 'checkin'
+            ? handleCheckInComplete
+            : handleCheckOutComplete
+        }
+        isProcessing={isProcessing}
+      />
+
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         <View className="flex-1 justify-center items-center px-4 py-3">
           {/** header */}
@@ -66,7 +268,7 @@ const Home = () => {
             >
               <Image
                 source={user?.profileImage ? { uri: user?.profileImage } : logo}
-                className="w-16 h-16 rounded-full"
+                className="w-16 h-16 rounded-full border border-gray-200"
               />
               <View>
                 <Text
@@ -204,6 +406,7 @@ const Home = () => {
           </View>
           {/**quote of the day */}
           <Quote />
+
           {/**salary slips */}
           <View className="w-full mt-8 border border-gray-200 rounded-2xl p-4">
             <View className="w-full flex flex-row  justify-between items-center">

@@ -11,6 +11,7 @@ module.exports = {
         whitelist: null,
         safe: false,
         allowUndefined: true,
+        verbose: false,
       },
     ],
   ],

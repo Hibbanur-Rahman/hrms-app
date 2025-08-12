@@ -12,6 +12,7 @@ import {
   handleIsAuthenticated,
   handleUserLogin,
 } from './src/redux/slices/auth/authSlice';
+import { validateEnv } from './src/config/env';
 import "./global.css"
 
 import Login from './src/screens/auth/login';
@@ -72,6 +73,8 @@ function AppContent() {
   };
 
   useEffect(() => {
+    // Validate environment variables
+    validateEnv();
     checkAuthStatus();
   }, []);
 

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { enableScreens } from 'react-native-screens';
+
+import ModernLoadingScreen from './src/components/ModernLoadingScreen';
 
 import store from './src/redux/store';
 import {
@@ -79,12 +80,7 @@ function AppContent() {
   }, []);
 
   if (loading || !initialRoute) {
-    return (
-      <View className='bg-white flex-1 justify-center items-center'>
-        <ActivityIndicator size="large" color="#9333EA" />
-        <Text className='text-gray-600 text-base' style={{fontFamily: 'Poppins-Regular'}}>Checking auth status...</Text>
-      </View>
-    );
+    return <ModernLoadingScreen />;
   }
 
   return (

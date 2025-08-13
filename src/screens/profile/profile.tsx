@@ -161,25 +161,7 @@ const Profile = () => {
       },
       iconBgColor: '#F3F4F6',
     },
-    {
-      icon: <BookOpen size={20} color="#10B981" />,
-      title: 'Student Portal',
-      subtitle: 'Access your courses and grades',
-      onPress: () => {
-        navigation.navigate('StudentPortal');
-      },
-      iconBgColor: '#ECFDF5',
-    },
-    {
-      icon: <Calendar size={20} color="#F59E0B" />,
-      title: 'Sessions',
-      subtitle: 'Manage your class sessions',
-      onPress: () => {
-        // TODO: Navigate to sessions
-        Alert.alert('Info', 'Navigate to sessions');
-      },
-      iconBgColor: '#FFFBEB',
-    },
+
     {
       icon: <DollarSign size={20} color="#059669" />,
       title: 'Salary Slips',
@@ -209,6 +191,25 @@ const Profile = () => {
       iconBgColor: '#FEF2F2',
     },
     {
+      icon: <BookOpen size={20} color="#10B981" />,
+      title: 'Student Portal',
+      subtitle: 'Access your courses and grades',
+      onPress: () => {
+        navigation.navigate('StudentPortal');
+      },
+      iconBgColor: '#ECFDF5',
+    },
+    {
+      icon: <Calendar size={20} color="#F59E0B" />,
+      title: 'Sessions',
+      subtitle: 'Manage your class sessions',
+      onPress: () => {
+        // TODO: Navigate to sessions
+        Alert.alert('Info', 'Navigate to sessions');
+      },
+      iconBgColor: '#FFFBEB',
+    },
+    {
       icon: <Settings size={20} color="#6B7280" />,
       title: 'Settings',
       subtitle: 'App preferences and more',
@@ -222,8 +223,7 @@ const Profile = () => {
       title: 'Privacy Policy',
       subtitle: 'Read our privacy terms',
       onPress: () => {
-        // TODO: Open privacy policy
-        Linking.openURL('https://example.com/privacy-policy');
+        navigation.navigate('PrivacyPolicy');
       },
       iconBgColor: '#F5F3FF',
     },

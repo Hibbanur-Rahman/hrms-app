@@ -13,6 +13,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LinearGradient from 'react-native-linear-gradient';
 import { 
   ArrowLeft, 
   Camera, 
@@ -214,7 +215,22 @@ const ProfileView = () => {
           contentContainerStyle={{ paddingBottom: 20 }}
         >
           {/* Profile Header */}
-          <View className="bg-gradient-to-br from-[#7563F7] to-[#9333EA] mx-4 mt-4 rounded-3xl p-6 shadow-lg">
+          <LinearGradient
+            colors={['#7563F7', '#9333EA']}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            style={{
+              marginHorizontal: 16,
+              marginTop: 16,
+              borderRadius: 24,
+              padding: 24,
+              shadowColor: '#000',
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.15,
+              shadowRadius: 8,
+              elevation: 8,
+            }}
+          >
             <View className="items-center">
               {/* Profile Image */}
               <View className="relative mb-4">
@@ -265,7 +281,7 @@ const ProfileView = () => {
                 ID: {editedUser.employeeId || 'N/A'}
               </Text>
             </View>
-          </View>
+          </LinearGradient>
 
           {/* Profile Information */}
           <View className="px-4 mt-6">

@@ -28,6 +28,8 @@ import Settings from './src/screens/profile/settings';
 import StudentPortal from './src/screens/profile/studentPortal';
 import SalarySlips from './src/screens/salarySlips/salarySlips';
 import Holidays from './src/screens/holidays/holidays';
+import PrivacyPolicy from './src/screens/privacyPolicy/privacyPolicy';
+import Expense from './src/screens/expense/expense';
 
 enableScreens();
 
@@ -43,6 +45,8 @@ export type RootStackParamList = {
   StudentPortal: undefined;
   SalarySlips: undefined;
   Holidays: undefined;
+  PrivacyPolicy: undefined;
+  Expense: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -140,8 +144,18 @@ function AppContent() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="Expense"
+          component={Expense}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="Holidays"
           component={Holidays}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PrivacyPolicy"
+          component={PrivacyPolicy}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

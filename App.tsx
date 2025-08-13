@@ -26,7 +26,7 @@ import Notification from './src/screens/notification/notification';
 import ProfileView from './src/screens/profile/profileView';
 import Settings from './src/screens/profile/settings';
 import StudentPortal from './src/screens/profile/studentPortal';
-import SalarySlips from './src/screens/profile/salarySlips';
+import SalarySlips from './src/screens/salarySlips/salarySlips';
 
 
 enableScreens();

@@ -13,21 +13,21 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../App';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { 
-  ArrowLeft, 
-  Bell, 
-  Camera, 
-  User, 
-  BookOpen, 
-  Calendar, 
-  DollarSign, 
-  FileText, 
-  MapPin, 
-  Shield, 
+import {
+  ArrowLeft,
+  Bell,
+  Camera,
+  User,
+  BookOpen,
+  Calendar,
+  DollarSign,
+  FileText,
+  MapPin,
+  Shield,
   LogOut,
   ChevronRight,
   Settings,
-  Edit3
+  Edit3,
 } from 'lucide-react-native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
@@ -43,13 +43,13 @@ interface MenuItemProps {
   iconBgColor?: string;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ 
-  icon, 
-  title, 
-  subtitle, 
-  onPress, 
+const MenuItem: React.FC<MenuItemProps> = ({
+  icon,
+  title,
+  subtitle,
+  onPress,
   showChevron = true,
-  iconBgColor = '#F3F4F6'
+  iconBgColor = '#F3F4F6',
 }) => (
   <TouchableOpacity
     onPress={onPress}
@@ -63,21 +63,21 @@ const MenuItem: React.FC<MenuItemProps> = ({
     }}
     activeOpacity={0.7}
   >
-    <View 
+    <View
       className="w-12 h-12 rounded-xl items-center justify-center mr-4"
       style={{ backgroundColor: iconBgColor }}
     >
       {icon}
     </View>
     <View className="flex-1">
-      <Text 
+      <Text
         className="text-gray-900 text-base font-medium"
         style={{ fontFamily: 'Poppins-Medium' }}
       >
         {title}
       </Text>
       {subtitle && (
-        <Text 
+        <Text
           className="text-gray-500 text-sm mt-1"
           style={{ fontFamily: 'Poppins-Regular' }}
         >
@@ -85,9 +85,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
         </Text>
       )}
     </View>
-    {showChevron && (
-      <ChevronRight size={20} color="#9CA3AF" />
-    )}
+    {showChevron && <ChevronRight size={20} color="#9CA3AF" />}
   </TouchableOpacity>
 );
 
@@ -113,52 +111,44 @@ const Profile = () => {
   };
 
   const handleLogout = async () => {
-    Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
+    Alert.alert('Logout', 'Are you sure you want to logout?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Logout',
+        style: 'destructive',
+        onPress: async () => {
+          await AsyncStorage.removeItem('access_token');
+          await AsyncStorage.removeItem('user');
+          navigation.navigate('Login');
         },
-        {
-          text: 'Logout',
-          style: 'destructive',
-          onPress: async () => {
-            await AsyncStorage.removeItem('access_token');
-            await AsyncStorage.removeItem('user');
-            navigation.navigate('Login');
-          },
-        },
-      ]
-    );
+      },
+    ]);
   };
 
   const handleImagePicker = () => {
-    Alert.alert(
-      'Update Profile Photo',
-      'Choose an option',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
+    Alert.alert('Update Profile Photo', 'Choose an option', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Camera',
+        onPress: () => {
+          // TODO: Implement camera functionality
+          Alert.alert('Camera', 'Camera functionality will be implemented');
         },
-        {
-          text: 'Camera',
-          onPress: () => {
-            // TODO: Implement camera functionality
-            Alert.alert('Camera', 'Camera functionality will be implemented');
-          },
+      },
+      {
+        text: 'Gallery',
+        onPress: () => {
+          // TODO: Implement gallery functionality
+          Alert.alert('Gallery', 'Gallery functionality will be implemented');
         },
-        {
-          text: 'Gallery',
-          onPress: () => {
-            // TODO: Implement gallery functionality
-            Alert.alert('Gallery', 'Gallery functionality will be implemented');
-          },
-        },
-      ]
-    );
+      },
+    ]);
   };
 
   const menuItems = [
@@ -214,8 +204,7 @@ const Profile = () => {
       title: 'Holiday Calendar',
       subtitle: 'View upcoming holidays',
       onPress: () => {
-        // TODO: Navigate to holiday calendar
-        Alert.alert('Info', 'Navigate to holiday calendar');
+        navigation.navigate('Holidays');
       },
       iconBgColor: '#FEF2F2',
     },
@@ -281,8 +270,8 @@ const Profile = () => {
               <View className="relative mb-4">
                 <View className="w-24 h-24 rounded-full bg-gray-200 items-center justify-center overflow-hidden">
                   {profileImage ? (
-                    <Image 
-                      source={{ uri: profileImage }} 
+                    <Image
+                      source={{ uri: profileImage }}
                       className="w-full h-full"
                       resizeMode="cover"
                     />
@@ -355,7 +344,7 @@ const Profile = () => {
             >
               Quick Access
             </Text>
-            
+
             {menuItems.map((item, index) => (
               <MenuItem
                 key={index}
@@ -377,13 +366,13 @@ const Profile = () => {
                 <LogOut size={20} color="#EF4444" />
               </View>
               <View className="flex-1">
-                <Text 
+                <Text
                   className="text-red-600 text-base font-medium"
                   style={{ fontFamily: 'Poppins-Medium' }}
                 >
                   Logout
                 </Text>
-                <Text 
+                <Text
                   className="text-red-400 text-sm mt-1"
                   style={{ fontFamily: 'Poppins-Regular' }}
                 >

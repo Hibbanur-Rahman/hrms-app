@@ -14,7 +14,7 @@ import {
   handleUserLogin,
 } from './src/redux/slices/auth/authSlice';
 import { validateEnv } from './src/config/env';
-import "./global.css"
+import './global.css';
 
 import Login from './src/screens/auth/login';
 import Register from './src/screens/auth/register';
@@ -27,7 +27,7 @@ import ProfileView from './src/screens/profile/profileView';
 import Settings from './src/screens/profile/settings';
 import StudentPortal from './src/screens/profile/studentPortal';
 import SalarySlips from './src/screens/salarySlips/salarySlips';
-
+import Holidays from './src/screens/holidays/holidays';
 
 enableScreens();
 
@@ -42,6 +42,7 @@ export type RootStackParamList = {
   Settings: undefined;
   StudentPortal: undefined;
   SalarySlips: undefined;
+  Holidays: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -49,8 +50,9 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 function AppContent() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-  const [initialRoute, setInitialRoute] =
-    useState<keyof RootStackParamList | null>(null);
+  const [initialRoute, setInitialRoute] = useState<
+    keyof RootStackParamList | null
+  >(null);
 
   const checkAuthStatus = async () => {
     try {
@@ -86,17 +88,62 @@ function AppContent() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={initialRoute}>
-        <Stack.Screen name="StartScreen" component={StartScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
-        <Stack.Screen name="ForgotPassword" component={ForgotPassword} options={{ headerShown: false }} />
-        <Stack.Screen name="Layout" component={Layout} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="StartScreen"
+          component={StartScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPassword}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Layout"
+          component={Layout}
+          options={{ headerShown: false }}
+        />
 
-        <Stack.Screen name="Notification" component={Notification} options={{ headerShown: false }} />
-        <Stack.Screen name="ProfileView" component={ProfileView} options={{ headerShown: false }} />
-        <Stack.Screen name="Settings" component={Settings} options={{ headerShown: false }} />
-        <Stack.Screen name="StudentPortal" component={StudentPortal} options={{ headerShown: false }} />
-        <Stack.Screen name="SalarySlips" component={SalarySlips} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Notification"
+          component={Notification}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ProfileView"
+          component={ProfileView}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Settings"
+          component={Settings}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="StudentPortal"
+          component={StudentPortal}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="SalarySlips"
+          component={SalarySlips}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Holidays"
+          component={Holidays}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

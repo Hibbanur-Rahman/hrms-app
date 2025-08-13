@@ -176,8 +176,7 @@ const Profile = () => {
       title: 'Expense Form',
       subtitle: 'Submit expense claims',
       onPress: () => {
-        // TODO: Navigate to expense form
-        Alert.alert('Info', 'Navigate to expense form');
+        navigation.navigate('Expense');
       },
       iconBgColor: '#EFF6FF',
     },

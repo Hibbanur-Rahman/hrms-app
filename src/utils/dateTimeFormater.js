@@ -1,3 +1,5 @@
+import { parseISO } from "date-fns";
+
 // Function to format date and time
 function formatDateTime(dateString) {
   const options = {
@@ -87,10 +89,19 @@ const calculateDurationInMinutes = (checkInTime, checkOutTime) => {
 
     return `${hours}h ${mins}m`;
   };
+
+  const formatISOToDate = (dateString) => {
+    try {
+      return format(parseISO(dateString), 'MMM dd, yyyy');
+    } catch {
+      return dateString;
+    }
+  };
 export {
   formatDateTime,
   formatTime,
   formatDate,
   calculateDurationInMinutes,
   formatDuration,
+  formatISOToDate,
 };

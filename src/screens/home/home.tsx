@@ -7,6 +7,11 @@ import {
   TouchableOpacity,
   Animated,
   Linking,
+  Alert,
+  PermissionsAndroid,
+  Platform,
+  ActivityIndicator,
+  Share,
 } from 'react-native';
 import logo from '../../assets/images/userImg.jpg';
 import { useSelector } from 'react-redux';
@@ -27,6 +32,12 @@ import {
   Timer,
   Watch,
   File,
+  User,
+  CheckCircle,
+  XCircle,
+  ClockIcon,
+  Mail,
+  Phone,
 } from 'lucide-react-native';
 import React, { useCallback, useState } from 'react';
 import SwipeToAction from '../../components/SwipeToAction';
@@ -37,7 +48,6 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { add } from '@hibbanur-rahman/sum-package';
 import AttendanceService from '../../services/AttendanceService';
 import LocationService from '../../services/LocationService';
-import { Alert } from 'react-native';
 import LocationTest from '../../components/LocationTest';
 import CheckInLoadingModal from '../../components/CheckInLoadingModal';
 import tw from 'twrnc';
@@ -52,10 +62,40 @@ import {
   formatDate,
   formatDateTime,
   formatDuration,
+  formatISOToDate,
   formatTime,
 } from '../../utils/dateTimeFormater';
 import LeaveService from '../../services/LeaveService';
+import SalarySlipService from '../../services/SalarySlipService';
+import ReactNativeBlobUtil from 'react-native-blob-util';
+import SalarySlipPDFViewer from '../../components/SalarySlipPDFViewer';
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
+const getStatusColor = (status: string) => {
+  switch (status?.toLowerCase()) {
+    case 'approved':
+      return { bg: '#dcfce7', text: '#166534', icon: '#16a34a' };
+    case 'rejected':
+      return { bg: '#fef2f2', text: '#dc2626', icon: '#ef4444' };
+    case 'pending':
+      return { bg: '#fef3c7', text: '#d97706', icon: '#f59e0b' };
+    default:
+      return { bg: '#f3f4f6', text: '#6b7280', icon: '#9ca3af' };
+  }
+};
+
+const getStatusIcon = (status: string) => {
+  switch (status?.toLowerCase()) {
+    case 'approved':
+      return <CheckCircle size={16} color={getStatusColor(status).icon} />;
+    case 'rejected':
+      return <XCircle size={16} color={getStatusColor(status).icon} />;
+    case 'pending':
+      return <ClockIcon size={16} color={getStatusColor(status).icon} />;
+    default:
+      return <ClockIcon size={16} color={getStatusColor(status).icon} />;
+  }
+};
 
 const Home = () => {
   const navigation = useNavigation<NavigationProp>();
@@ -83,6 +123,13 @@ const Home = () => {
   const [limit, setLimit] = useState(10);
   const [loading, setLoading] = useState(false);
   const [leavesList, setLeavesList] = useState<any>([]);
+  const [salarySlipsList, setSalarySlipsList] = useState<any>([]);
+  const [pdfPreviewVisible, setPdfPreviewVisible] = useState(false);
+  const [pdfUri, setPdfUri] = useState('');
+  const [pdfFileName, setPdfFileName] = useState('');
+  const [currentSalarySlipId, setCurrentSalarySlipId] = useState('');
+  const [downloadingSlipId, setDownloadingSlipId] = useState('');
+  const [viewingSlipId, setViewingSlipId] = useState('');
 
   //months
   const months = [
@@ -160,11 +207,11 @@ const Home = () => {
 
   const handleCheckInComplete = () => {
     setShowLoadingModal(false);
-    Alert.alert(
-      'Check-in Successful',
-      'Your attendance has been recorded successfully!',
-      [{ text: 'OK' }],
-    );
+    // Alert.alert(
+    //   'Check-in Successful',
+    //   'Your attendance has been recorded successfully!',
+    //   [{ text: 'OK' }],
+    // );
     setIsCheckedIn(false);
   };
 
@@ -203,11 +250,11 @@ const Home = () => {
 
   const handleCheckOutComplete = () => {
     setShowLoadingModal(false);
-    Alert.alert(
-      'Check-out Successful',
-      'Your attendance has been recorded successfully!',
-      [{ text: 'OK' }],
-    );
+    // Alert.alert(
+    //   'Check-out Successful',
+    //   'Your attendance has been recorded successfully!',
+    //   [{ text: 'OK' }],
+    // );
   };
 
   //fetch today attendance
@@ -366,11 +413,392 @@ const Home = () => {
       console.log('error', error);
     }
   };
+
+  //handle get salary slips list
+  const handleGetSalarySlipsList = async () => {
+    try {
+      const response = await SalarySlipService.GetAllSalarySlip(
+        user?._id,
+        new Date().getFullYear().toString(),
+      );
+      console.log('salary slips list', response);
+      if (response?.status === 200) {
+        setSalarySlipsList(response?.data?.data);
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+
+  //handle download slips
+  const handleDownloadSlips = async (id: string) => {
+    try {
+      setDownloadingSlipId(id);
+      console.log("downloading slip id:", id);
+      
+      // Request storage permission on Android
+      if (Platform.OS === 'android') {
+        // For Android 11+ (API 30+), we need to handle scoped storage differently
+        const androidVersion = typeof Platform.Version === 'number' ? Platform.Version : parseInt(String(Platform.Version));
+        
+        if (androidVersion >= 30) {
+          // Android 11+ uses scoped storage, check if we can write to downloads
+          try {
+            // Try to write a test file to see if we have access
+            const { fs } = ReactNativeBlobUtil;
+            const testPath = `${fs.dirs.DownloadDir}/test_write_permission.txt`;
+            await fs.writeFile(testPath, 'test', 'utf8');
+            await fs.unlink(testPath); // Clean up test file
+          } catch (error) {
+            Alert.alert(
+              'Storage Access Required',
+              'This app needs access to download folder. Please allow file access in the next dialog.',
+              [
+                {
+                  text: 'Cancel',
+                  style: 'cancel',
+                  onPress: () => {
+                    return;
+                  }
+                },
+                {
+                  text: 'Continue',
+                  onPress: () => {
+                    // For Android 11+, we'll try to download anyway as the system may handle it
+                    console.log('Continuing with download on Android 11+');
+                  }
+                }
+              ]
+            );
+          }
+        } else {
+          // For Android 10 and below, use traditional permissions
+          const hasPermission = await PermissionsAndroid.check(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+          );
+          
+          if (!hasPermission) {
+            const granted = await PermissionsAndroid.request(
+              PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+              {
+                title: 'Storage Permission Required',
+                message: 'This app needs access to storage to download salary slips to your device.',
+                buttonNeutral: 'Ask Me Later',
+                buttonNegative: 'Cancel',
+                buttonPositive: 'Allow',
+              },
+            );
+            
+            console.log("permission granted:", granted);
+            
+            if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
+              Alert.alert(
+                'Permission Required',
+                'Storage permission was denied. Please enable it manually in app settings to download files.',
+                [
+                  {
+                    text: 'Cancel',
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'Open Settings',
+                    onPress: () => {
+                      Linking.openSettings();
+                    },
+                  },
+                ]
+              );
+              return;
+            } else if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+              Alert.alert(
+                'Permission Denied', 
+                'Storage permission is required to download files. Please try again and allow the permission.'
+              );
+              return;
+            }
+          }
+        }
+      }
+
+      Alert.alert('Download Started', 'Your salary slip is being downloaded...');
+      
+      const response = await SalarySlipService.DownloadSalarySlip(id);
+      console.log("response of download slips response:", response?.data);
+      
+      // Configure download path - prefer Downloads folder for better accessibility
+      const { fs } = ReactNativeBlobUtil;
+      const currentDate = new Date();
+      const fileName = `salary_slip_${currentDate.getFullYear()}_${(currentDate.getMonth() + 1).toString().padStart(2, '0')}_${id}.pdf`;
+      
+      let downloadPath;
+      let downloadMethod = 'downloads';
+      
+      try {
+        // Always try to use Downloads folder first for better file access
+        downloadPath = `${fs.dirs.DownloadDir}/${fileName}`;
+        downloadMethod = 'downloads';
+      } catch (error) {
+        // Fallback to app's document directory if Downloads folder is not accessible
+        console.log('Downloads folder not accessible, using app directory:', error);
+        downloadPath = `${fs.dirs.DocumentDir}/${fileName}`;
+        downloadMethod = 'app_storage';
+      }
+
+      // If response data is available, save it directly
+      if (response?.data) {
+        // Handle different response formats
+        let pdfData = response.data;
+        
+        // If the response is wrapped in another object, extract the PDF data
+        if (typeof response.data === 'object' && response.data.data) {
+          pdfData = response.data.data;
+        }
+        
+        // Convert blob or other data formats to base64
+        let base64Data = '';
+        
+        if (typeof pdfData === 'string') {
+          if (pdfData.startsWith('%PDF')) {
+            // Raw PDF data - convert to base64
+            base64Data = ReactNativeBlobUtil.base64.encode(pdfData);
+          } else if (pdfData.startsWith('data:application/pdf;base64,')) {
+            // Data URL format - extract base64 part
+            base64Data = pdfData.split(',')[1];
+          } else {
+            // Assume it's already base64
+            base64Data = pdfData;
+          }
+        } else if (pdfData instanceof Blob) {
+          // Handle Blob data by converting to base64
+          try {
+            const reader = new FileReader();
+            reader.onload = () => {
+              const result = reader.result as string;
+              base64Data = result.split(',')[1]; // Remove data URL prefix
+            };
+            reader.readAsDataURL(pdfData);
+          } catch (error) {
+            console.log('Error converting blob to base64:', error);
+            Alert.alert('Error', 'Failed to process PDF data');
+            return;
+          }
+        } else {
+          // Handle other data types by converting to string first
+          try {
+            const stringData = JSON.stringify(pdfData);
+            base64Data = ReactNativeBlobUtil.base64.encode(stringData);
+          } catch (error) {
+            console.log('Error processing PDF data:', error);
+            Alert.alert('Error', 'Invalid PDF data format');
+            return;
+          }
+        }
+        
+        // Write the base64 PDF data to the file
+        if (base64Data && base64Data.length > 0) {
+          await fs.writeFile(downloadPath, base64Data, 'base64');
+        } else {
+          Alert.alert('Error', 'Invalid PDF data format for download');
+          return;
+        }
+        
+        let downloadMessage = '';
+        if (downloadMethod === 'app_storage') {
+          downloadMessage = `Salary slip saved to app documents as ${fileName}`;
+        } else {
+          downloadMessage = `Salary slip downloaded to Downloads folder as ${fileName}`;
+        }
+        
+        Alert.alert(
+          'Download Complete', 
+          downloadMessage,
+          [
+            {
+              text: 'Open',
+              onPress: async () => {
+                try {
+                  if (Platform.OS === 'android') {
+                    console.log("Opening file path on Android:", downloadPath);
+                    // Use react-native-blob-util's android method to open files safely
+                    await ReactNativeBlobUtil.android.actionViewIntent(downloadPath, 'application/pdf');
+
+                  } else {
+                    // For iOS, use the file:// scheme
+                    const filePath = `file://${downloadPath}`;
+                    await Linking.openURL(filePath);
+                  }
+                } catch (error) {
+                  console.log("error while opening file:", error);
+                  
+                  // Fallback: Try to share the file instead
+                  try {
+                    if (Platform.OS === 'android') {
+                      // Use the Share API as a fallback
+                      await Share.share({
+                        title: 'Salary Slip',
+                        message: 'Please find your salary slip attached',
+                        url: `file://${downloadPath}`,
+                      });
+                    } else {
+                      Alert.alert('Error', 'Could not open the downloaded file. Please check your Downloads folder.');
+                    }
+                  } catch (shareError) {
+                    console.log("error while sharing file:", shareError);
+                    Alert.alert(
+                      'Cannot Open File', 
+                      'The file was downloaded successfully, but could not be opened. Please check your file manager or install a PDF viewer app.',
+                      [
+                        {
+                          text: 'Install PDF Viewer',
+                          onPress: () => {
+                            const storeUrl = Platform.OS === 'android' 
+                              ? 'market://search?q=pdf+viewer'
+                              : 'https://apps.apple.com/search?term=pdf+viewer';
+                            Linking.openURL(storeUrl);
+                          }
+                        },
+                        { text: 'OK' }
+                      ]
+                    );
+                  }
+                }
+              },
+            },
+            { text: 'OK' },
+          ]
+        );
+      } else {
+        Alert.alert('Error', 'No data received for download');
+      }
+    } catch (error: any) {
+
+      console.log("error while download slips:", error);
+      Alert.alert(
+        'Download Failed',
+        error?.data?.message || error?.message || 'Failed to download salary slip'
+      );
+    } finally {
+      setDownloadingSlipId('');
+    }
+  };
+
+  //handle view slips
+  const handleViewSlips = async (id: string) => {
+    try {
+      setViewingSlipId(id);
+      
+      const response = await SalarySlipService.ViewSalarySlip(id);
+      console.log("response of view slips response:", response?.data);
+      
+      if (response?.data) {
+        // Handle different response formats
+        let pdfData = response.data;
+        
+        // If the response is wrapped in another object, extract the PDF data
+        if (typeof response.data === 'object' && response.data.data) {
+          pdfData = response.data.data;
+        }
+        
+        // Check if we have valid PDF data
+        if (typeof pdfData === 'string' && pdfData.length > 0) {
+          // Create a temporary file for viewing in a more accessible location
+          const { fs } = ReactNativeBlobUtil;
+          const currentDate = new Date();
+          const fileName = `temp_salary_slip_${currentDate.getTime()}.pdf`;
+          
+          // Use external cache directory which is more accessible for viewing
+          let viewPath;
+          try {
+            // Try external cache first (more accessible)
+            viewPath = `${fs.dirs.CacheDir}/${fileName}`;
+          } catch (error) {
+            // Fallback to regular cache
+            viewPath = `${fs.dirs.CacheDir}/${fileName}`;
+          }
+          
+          // Convert data to base64 if needed and write to file
+          let base64Data = '';
+          
+          if (pdfData.startsWith('%PDF')) {
+            // Raw PDF data - convert to base64
+            base64Data = ReactNativeBlobUtil.base64.encode(pdfData);
+          } else if (pdfData.startsWith('data:application/pdf;base64,')) {
+            // Data URL format - extract base64 part
+            base64Data = pdfData.split(',')[1];
+          } else {
+            // Assume it's already base64
+            base64Data = pdfData;
+          }
+          
+          // Write the base64 PDF data to a temporary file
+          await fs.writeFile(viewPath, base64Data, 'base64');
+          
+          console.log('PDF saved for viewing at:', viewPath);
+          
+          // Set the PDF preview state
+          setPdfUri(`file://${viewPath}`);
+          setPdfFileName(`Salary Slip - ${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}`);
+          setCurrentSalarySlipId(id);
+          setPdfPreviewVisible(true);
+        } else if (pdfData instanceof Blob) {
+          // Handle Blob data
+          try {
+            const { fs } = ReactNativeBlobUtil;
+            const currentDate = new Date();
+            const fileName = `temp_salary_slip_${currentDate.getTime()}.pdf`;
+            const viewPath = `${fs.dirs.CacheDir}/${fileName}`;
+            
+            // Convert Blob to base64
+            const reader = new FileReader();
+            reader.onload = async () => {
+              const result = reader.result as string;
+              const base64Data = result.split(',')[1]; // Remove data URL prefix
+              
+              await fs.writeFile(viewPath, base64Data, 'base64');
+              
+              // Set the PDF preview state
+              setPdfUri(`file://${viewPath}`);
+              setPdfFileName(`Salary Slip - ${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}`);
+              setCurrentSalarySlipId(id);
+              setPdfPreviewVisible(true);
+            };
+            reader.readAsDataURL(pdfData);
+          } catch (error) {
+            console.log('Error converting blob to base64:', error);
+            Alert.alert('Error', 'Failed to process PDF data');
+          }
+        } else {
+          Alert.alert('Error', 'Invalid PDF data format received');
+        }
+      } else {
+        Alert.alert('Error', 'No PDF data received');
+      }
+    } catch (error: any) {
+      console.log("error while viewing slips:", error);
+      Alert.alert(
+        'View Failed',
+        error?.data?.message || error?.message || 'Failed to view salary slip'
+      );
+    } finally {
+      setViewingSlipId('');
+    }
+  };
+
+  //animated styles
+  const filterAnimatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: filterScale.value }],
+  }));
+
   useFocusEffect(
     useCallback(() => {
       handleGetAttendanceList();
       handleFetchAttendanceCount();
     }, [selectedMonth, selectedYear]),
+  );
+  useFocusEffect(
+    useCallback(() => {
+      handleGetSalarySlipsList();
+    }, []),
   );
   useFocusEffect(
     useCallback(() => {
@@ -385,11 +813,7 @@ const Home = () => {
     }, [isCheckedIn, isCheckedOut]),
   );
 
-  //animated styles
-  const filterAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: filterScale.value }],
-  }));
-
+  
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Loading Modal */}
@@ -611,93 +1035,67 @@ const Home = () => {
               </TouchableOpacity>
             </View>
             <View className="w-full mt-4 gap-y-3 flex flex-col">
-              <View className="w-full flex flex-row  justify-between items-center p-2 border border-gray-200 rounded-2xl">
-                <View className="flex-row items-center gap-2">
-                  <View className="p-3 rounded-full bg-violet-200">
-                    <FileDigit size={30} color="#5658e6" />
+              {salarySlipsList?.slips?.length > 0 && salarySlipsList?.slips?.map((item: any, index: number) => (
+                <View className="w-full flex flex-row  justify-between items-center p-2 border border-gray-200 rounded-2xl">
+                  <View className="flex-row items-center gap-2">
+                    <View className="p-3 rounded-full bg-violet-200">
+                      <FileDigit size={30} color="#5658e6" />
+                    </View>
+                    <View>
+                      <Text
+                        className="text-gray-700"
+                        style={{ fontFamily: 'Poppins-Medium' }}
+                      >
+                        {item?.month} {item?.year}
+                      </Text>
+                      <Text
+                        className="text-gray-700"
+                        style={{ fontFamily: 'Poppins-Regular' }}
+                      >
+                        Net Salary: ₹{item?.netSalary || 0}
+                      </Text>
+                    </View>
                   </View>
-                  <View>
-                    <Text
-                      className="text-gray-700"
-                      style={{ fontFamily: 'Poppins-Medium' }}
+                  <View className="flex-row items-center gap-2">
+                    <TouchableOpacity 
+                      onPress={() => {
+                        handleViewSlips(item?._id)
+                      }}
+                      disabled={viewingSlipId === item?._id}
+                      style={{
+                        opacity: viewingSlipId === item?._id ? 0.5 : 1
+                      }}
                     >
-                      June 2025
-                    </Text>
-                    <Text
-                      className="text-gray-700"
-                      style={{ fontFamily: 'Poppins-Regular' }}
+                      {viewingSlipId === item?._id ? (
+                        <ActivityIndicator size="small" color="blue" />
+                      ) : (
+                        <Feather name="eye" size={24} color="gray" />
+                      )}
+                    </TouchableOpacity>
+                    <TouchableOpacity 
+                      onPress={() => {
+                        handleDownloadSlips(item?._id)
+                      }}
+                      disabled={downloadingSlipId === item?._id}
+                      style={{
+                        opacity: downloadingSlipId === item?._id ? 0.5 : 1
+                      }}
                     >
-                      Net Salary: ₹10,500
-                    </Text>
-                  </View>
-                </View>
-                <View className="flex-row items-center gap-2">
-                  <TouchableOpacity>
-                    <Feather name="eye" size={24} color="gray" />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Feather name="download" size={24} color="gray" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View className="w-full flex flex-row  justify-between items-center p-2 border border-gray-200 rounded-2xl">
-                <View className="flex-row items-center gap-2">
-                  <View className="p-3 rounded-full bg-violet-200">
-                    <FileDigit size={30} color="#5658e6" />
-                  </View>
-                  <View>
-                    <Text
-                      className="text-gray-700"
-                      style={{ fontFamily: 'Poppins-Medium' }}
-                    >
-                      June 2025
-                    </Text>
-                    <Text
-                      className="text-gray-700"
-                      style={{ fontFamily: 'Poppins-Regular' }}
-                    >
-                      Net Salary: ₹10,500
-                    </Text>
-                  </View>
-                </View>
-                <View className="flex-row items-center gap-2">
-                  <TouchableOpacity>
-                    <Feather name="eye" size={24} color="gray" />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Feather name="download" size={24} color="gray" />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View className="w-full flex flex-row  justify-between items-center p-2 border border-gray-200 rounded-2xl">
-                <View className="flex-row items-center gap-2">
-                  <View className="p-3 rounded-full bg-violet-200">
-                    <FileDigit size={30} color="#5658e6" />
-                  </View>
-                  <View>
-                    <Text
-                      className="text-gray-700"
-                      style={{ fontFamily: 'Poppins-Medium' }}
-                    >
-                      June 2025
-                    </Text>
-                    <Text
-                      className="text-gray-700"
-                      style={{ fontFamily: 'Poppins-Regular' }}
-                    >
-                      Net Salary: ₹10,500
-                    </Text>
+                      {downloadingSlipId === item?._id ? (
+                        <ActivityIndicator size="small" color="green" />
+                      ) : (
+                        <Feather name="download" size={24} color="gray" />
+                      )}
+                    </TouchableOpacity>
                   </View>
                 </View>
-                <View className="flex-row items-center gap-2">
-                  <TouchableOpacity>
-                    <Feather name="eye" size={24} color="gray" />
-                  </TouchableOpacity>
-                  <TouchableOpacity>
-                    <Feather name="download" size={24} color="gray" />
-                  </TouchableOpacity>
+              ))}
+
+              {salarySlipsList?.slips?.length === 0 && (
+                <View className="w-full flex flex-row  justify-between items-center p-2 border border-gray-200 rounded-2xl">
+                  <Text className="text-gray-700" style={{ fontFamily: 'Poppins-Regular' }}>No salary slips found</Text>
                 </View>
-              </View>
+              )}
             </View>
           </View>
 
@@ -821,7 +1219,7 @@ const Home = () => {
                         className="text-lg font-semibold text-gray-900 mb-1"
                         style={{ fontFamily: 'Poppins-SemiBold' }}
                       >
-                        {leave.name}
+                        {leave?.name}
                       </Text>
                       <View className="flex-row items-center gap-2">
                         <User size={14} color="#6b7280" />
@@ -829,19 +1227,21 @@ const Home = () => {
                           className="text-sm text-gray-600"
                           style={{ fontFamily: 'Poppins-Regular' }}
                         >
-                          {leave.employeeId}
+                          {leave?.employeeId}
                         </Text>
                       </View>
                     </View>
                     <View
                       className="px-3 py-1 rounded-full flex-row items-center gap-1"
-                      style={{ backgroundColor: statusColors.bg }}
+                      style={{
+                        backgroundColor: getStatusColor(leave?.status)?.bg,
+                      }}
                     >
                       {getStatusIcon(leave.status)}
                       <Text
                         className="text-xs font-medium"
                         style={{
-                          color: statusColors.text,
+                          color: getStatusColor(leave?.status)?.text,
                           fontFamily: 'Poppins-Medium',
                         }}
                       >
@@ -858,7 +1258,7 @@ const Home = () => {
                         className="text-sm text-gray-600"
                         style={{ fontFamily: 'Poppins-Regular' }}
                       >
-                        {leave.email}
+                        {leave?.email}
                       </Text>
                     </View>
                     <View className="flex-row items-center gap-2">
@@ -867,7 +1267,7 @@ const Home = () => {
                         className="text-sm text-gray-600"
                         style={{ fontFamily: 'Poppins-Regular' }}
                       >
-                        {leave.mobile}
+                        {leave?.mobile}
                       </Text>
                     </View>
                   </View>
@@ -881,7 +1281,7 @@ const Home = () => {
                           className="text-sm font-medium text-gray-700"
                           style={{ fontFamily: 'Poppins-Medium' }}
                         >
-                          From: {formatDate(leave.fromDate)}
+                          From: {formatISOToDate(leave?.fromDate || '')}
                         </Text>
                       </View>
                       <View className="flex-row items-center gap-2">
@@ -890,7 +1290,7 @@ const Home = () => {
                           className="text-sm font-medium text-gray-700"
                           style={{ fontFamily: 'Poppins-Medium' }}
                         >
-                          To: {formatDate(leave.toDate)}
+                          To: {formatISOToDate(leave?.toDate || '')}
                         </Text>
                       </View>
                     </View>
@@ -900,13 +1300,13 @@ const Home = () => {
                         className="text-sm text-gray-600"
                         style={{ fontFamily: 'Poppins-Regular' }}
                       >
-                        {leave.leaveDays} day(s)
+                        {leave?.leaveDays} day(s)
                       </Text>
                     </View>
                   </View>
 
                   {/**file */}
-                  {leave.fileUrl && (
+                  {leave?.fileUrl && (
                     <View className="mb-3">
                       <Text
                         className="text-sm font-medium text-gray-700 mb-1"
@@ -915,7 +1315,7 @@ const Home = () => {
                         File:
                       </Text>
                       <TouchableOpacity
-                        onPress={() => Linking.openURL(leave.fileUrl)}
+                        onPress={() => Linking.openURL(leave?.fileUrl)}
                         className="flex-row items-center gap-2"
                       >
                         <File size={16} color="#3b82f6" />
@@ -930,7 +1330,7 @@ const Home = () => {
                   )}
 
                   {/* Reason */}
-                  {leave.reason && (
+                  {leave?.reason && (
                     <View className="mb-3">
                       <Text
                         className="text-sm font-medium text-gray-700 mb-1"
@@ -942,7 +1342,7 @@ const Home = () => {
                         className="text-sm text-gray-600 leading-5"
                         style={{ fontFamily: 'Poppins-Regular' }}
                       >
-                        {leave.reason}
+                        {leave?.reason}
                       </Text>
                     </View>
                   )}
@@ -953,14 +1353,14 @@ const Home = () => {
                       className="text-xs text-gray-500"
                       style={{ fontFamily: 'Poppins-Regular' }}
                     >
-                      Applied: {formatDate(leave.applyDate)}
+                      Applied: {formatDate(leave?.applyDate)}
                     </Text>
-                    {leave.approverName && (
+                    {leave?.approverName && (
                       <Text
                         className="text-xs text-gray-500"
                         style={{ fontFamily: 'Poppins-Regular' }}
                       >
-                        Approved by: {leave.approverName}
+                        Approved by: {leave?.approverName}
                       </Text>
                     )}
                   </View>
@@ -1188,9 +1588,19 @@ const Home = () => {
                 </View>
               ))}
               {attendanceList.length === 0 && (
-                <View className="w-full flex flex-col items-center justify-center">
-                  <Text className="text-gray-700 text-sm">
+                <View className="items-center">
+                  <Calendar size={48} color="#d1d5db" />
+                  <Text
+                    className="text-gray-500 text-base mt-3"
+                    style={{ fontFamily: 'Poppins-Medium' }}
+                  >
                     No attendance found
+                  </Text>
+                  <Text
+                    className="text-gray-400 text-sm mt-1 text-center"
+                    style={{ fontFamily: 'Poppins-Regular' }}
+                  >
+                    Try adjusting your filters or check back later
                   </Text>
                 </View>
               )}
@@ -1198,6 +1608,20 @@ const Home = () => {
           </View>
         </View>
       </ScrollView>
+      
+      {/* PDF Preview Modal */}
+      <SalarySlipPDFViewer
+        visible={pdfPreviewVisible}
+        onClose={() => {
+          setPdfPreviewVisible(false);
+          setPdfUri('');
+          setPdfFileName('');
+          setCurrentSalarySlipId('');
+        }}
+        fileUri={pdfUri}
+        fileName={pdfFileName}
+        salarySlipId={currentSalarySlipId}
+      />
     </SafeAreaView>
   );
 };

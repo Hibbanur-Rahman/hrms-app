@@ -25,11 +25,12 @@ import AuthService from './src/services/AuthService';
 import Notification from './src/screens/notification/notification';
 import ProfileView from './src/screens/profile/profileView';
 import Settings from './src/screens/profile/settings';
-import StudentPortal from './src/screens/profile/studentPortal';
+import StudentPortal from './src/screens/students/studentPortal';
 import SalarySlips from './src/screens/salarySlips/salarySlips';
 import Holidays from './src/screens/holidays/holidays';
 import PrivacyPolicy from './src/screens/privacyPolicy/privacyPolicy';
 import Expense from './src/screens/expense/expense';
+import Notifications from './src/screens/notifications/notifications';
 
 enableScreens();
 
@@ -47,6 +48,7 @@ export type RootStackParamList = {
   Holidays: undefined;
   PrivacyPolicy: undefined;
   Expense: undefined;
+
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -158,6 +160,7 @@ function AppContent() {
           component={PrivacyPolicy}
           options={{ headerShown: false }}
         />
+       
       </Stack.Navigator>
     </NavigationContainer>
   );

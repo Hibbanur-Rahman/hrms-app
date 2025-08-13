@@ -7,12 +7,22 @@ const GetAllEmployees = async () =>
     secure: true,
   });
 
-  const GetAllProjects = async () =>
-  Request({
-    url: 'project/user',
-    method: 'get',
-    secure: true,
-  });
+  const GetAllProjects = async (params?: { page?: number; limit?: number; search?: string }) => {
+    const queryParams = new URLSearchParams();
+    
+    if (params?.page) queryParams.append('page', params.page.toString());
+    if (params?.limit) queryParams.append('limit', params.limit.toString());
+    if (params?.search) queryParams.append('search', params.search);
+    
+    const queryString = queryParams.toString();
+    const url = queryString ? `project/user?${queryString}` : 'project/user';
+    
+    return Request({
+      url,
+      method: 'get',
+      secure: true,
+    });
+  };
 
 const CreateProject = async (payload: any) =>
   Request({

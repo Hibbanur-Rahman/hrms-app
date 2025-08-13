@@ -208,15 +208,15 @@ const Profile = () => {
       },
       iconBgColor: '#FFFBEB',
     },
-    {
-      icon: <Settings size={20} color="#6B7280" />,
-      title: 'Settings',
-      subtitle: 'App preferences and more',
-      onPress: () => {
-        navigation.navigate('Settings');
-      },
-      iconBgColor: '#F9FAFB',
-    },
+    // {
+    //   icon: <Settings size={20} color="#6B7280" />,
+    //   title: 'Settings',
+    //   subtitle: 'App preferences and more',
+    //   onPress: () => {
+    //     navigation.navigate('Settings');
+    //   },
+    //   iconBgColor: '#F9FAFB',
+    // },
     {
       icon: <Shield size={20} color="#8B5CF6" />,
       title: 'Privacy Policy',

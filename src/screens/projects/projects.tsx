@@ -42,7 +42,7 @@ type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 const Projects = () => {
   const navigation = useNavigation<NavigationProp>();
   const currentUser = useSelector((state: any) => state.auth?.user);
-  const [projects, setProjects] = useState([]);
+  const [projects, setProjects] = useState<any[]>([]);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
@@ -71,6 +71,14 @@ const Projects = () => {
   const [employees, setEmployees] = useState<
     Array<{ _id: string; name: string; value: string; label: string }>
   >([]);
+
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProjects, setTotalProjects] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(false);
+  const [hasPrevPage, setHasPrevPage] = useState(false);
+  const [limit] = useState(25);
 
   // Animation values
   const searchOpacity = useSharedValue(0);
@@ -111,20 +119,89 @@ const Projects = () => {
     }
   };
 
-  const handleGetAllProjects = async () => {
+  const handleGetAllProjects = async (page: number = 1) => {
     try {
       setLoading(true);
-      const response = await ProjectService.GetAllProjects();
-      console.log(response);
-      if (response.status === 200) {
-        setProjects(response?.data?.data?.reverse());
+      const response = await ProjectService.GetAllProjects({
+        page,
+        limit,
+        search: searchTerm,
+      });
+      console.log('Projects API Response:', response);
+      
+      if (response.status === 200 && response.data) {
+        const { projects = [], pagination = {} } = response.data?.data;
+        
+        // Update projects
+        setProjects(projects);
+        
+        // Update pagination state
+        setCurrentPage(pagination.currentPage || 1);
+        setTotalPages(pagination.totalPages || 1);
+        setTotalProjects(pagination.totalProjects || 0);
+        setHasNextPage(pagination.hasNextPage || false);
+        setHasPrevPage(pagination.hasPrevPage || false);
+      } else {
+        setProjects([]);
+        resetPagination();
       }
     } catch (error) {
       console.log('Error in fetching projects', error);
+      setProjects([]);
+      resetPagination();
     } finally {
       setLoading(false);
     }
   };
+
+  const resetPagination = () => {
+    setCurrentPage(1);
+    setTotalPages(1);
+    setTotalProjects(0);
+    setHasNextPage(false);
+    setHasPrevPage(false);
+  };
+
+  // Pagination navigation functions
+  const handleNextPage = () => {
+    if (hasNextPage && currentPage < totalPages) {
+      const nextPage = currentPage + 1;
+      setCurrentPage(nextPage);
+      handleGetAllProjects(nextPage);
+    }
+  };
+
+  const handlePrevPage = () => {
+    if (hasPrevPage && currentPage > 1) {
+      const prevPage = currentPage - 1;
+      setCurrentPage(prevPage);
+      handleGetAllProjects(prevPage);
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages && page !== currentPage) {
+      setCurrentPage(page);
+      handleGetAllProjects(page);
+    }
+  };
+
+  // Search handler with debouncing
+  const handleSearch = useCallback(() => {
+    setCurrentPage(1); // Reset to first page when searching
+    handleGetAllProjects(1);
+  }, [searchTerm]);
+
+  // Debounced search effect
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (searchTerm.length >= 0) { // Allow empty search to show all projects
+        handleSearch();
+      }
+    }, 500); // 500ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm, handleSearch]);
 
   const handleCreateProject = async ({
     name,
@@ -165,7 +242,7 @@ const Projects = () => {
           team: [],
         });
         setLoading(false);
-        handleGetAllProjects();
+        handleGetAllProjects(1);
       }
     } catch (error) {
       console.log('Error in creating project', error);
@@ -179,7 +256,7 @@ const Projects = () => {
       const response = await ProjectService.DeleteProject(id);
       console.log(response);
       if (response.status === 200) {
-        handleGetAllProjects();
+        handleGetAllProjects(currentPage);
       }
     } catch (error) {
       console.log('Error in deleting project', error);
@@ -234,7 +311,7 @@ const Projects = () => {
         });
         setEditEndDateOpen(false);
         setLoading(false);
-        handleGetAllProjects();
+        handleGetAllProjects(currentPage);
       }
     } catch (error) {
       console.log('Error in editing project', error);
@@ -264,11 +341,11 @@ const Projects = () => {
   useFocusEffect(
     useCallback(() => {
       handleGetAllEmployees();
-      handleGetAllProjects();
+      handleGetAllProjects(1);
     }, [viewAll]),
   );
 
-  const filteredProjects = projects?.filter((project: any) => {
+  const filteredProjects = (projects || []).filter((project: any) => {
     const search = searchTerm.toLowerCase();
     return (
       project?.name?.toLowerCase().includes(search) ||

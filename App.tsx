@@ -30,7 +30,8 @@ import SalarySlips from './src/screens/salarySlips/salarySlips';
 import Holidays from './src/screens/holidays/holidays';
 import PrivacyPolicy from './src/screens/privacyPolicy/privacyPolicy';
 import Expense from './src/screens/expense/expense';
-import Notifications from './src/screens/notifications/notifications';
+import Sessions from './src/screens/sessions/sessions';
+import StudentDetails from './src/screens/students/studentDetails';
 
 enableScreens();
 
@@ -43,11 +44,13 @@ export type RootStackParamList = {
   Notification: undefined;
   ProfileView: undefined;
   Settings: undefined;
-  StudentPortal: undefined;
+  Students: undefined;
+  StudentDetails: { student: any } | undefined;
   SalarySlips: undefined;
   Holidays: undefined;
   PrivacyPolicy: undefined;
   Expense: undefined;
+  Sessions: undefined;
 
 };
 
@@ -136,8 +139,18 @@ function AppContent() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="StudentPortal"
+          name="Students"
           component={StudentPortal}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="StudentDetails"
+          component={StudentDetails}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Sessions"
+          component={Sessions}
           options={{ headerShown: false }}
         />
         <Stack.Screen

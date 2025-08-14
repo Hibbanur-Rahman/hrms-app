@@ -1,8 +1,11 @@
 import React from 'react'
+import { Text, View } from 'react-native'
 
 const Sessions = () => {
   return (
-    <div>Sessions</div>
+   <View>
+        <Text>Sessions</Text>
+   </View>
   )
 }
 

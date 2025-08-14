@@ -194,7 +194,7 @@ const Profile = () => {
       title: 'Student Portal',
       subtitle: 'Access your courses and grades',
       onPress: () => {
-        navigation.navigate('StudentPortal');
+        navigation.navigate('Students');
       },
       iconBgColor: '#ECFDF5',
     },
@@ -202,9 +202,8 @@ const Profile = () => {
       icon: <Calendar size={20} color="#F59E0B" />,
       title: 'Sessions',
       subtitle: 'Manage your class sessions',
-      onPress: () => {
-        // TODO: Navigate to sessions
-        Alert.alert('Info', 'Navigate to sessions');
+     onPress: () => {
+        navigation.navigate('Sessions');
       },
       iconBgColor: '#FFFBEB',
     },

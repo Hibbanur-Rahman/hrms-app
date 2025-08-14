@@ -1,0 +1,343 @@
+name,phone,gender,presentClass,curriculum,studentId,parentName,parentNumber,schoolName
+John Doe,1234567890,Male,10th,Science,STU001,Robert Doe,1234567891,ABC High School
+Jane Smith,2345678901,Female,12th,Commerce,STU002,Mary Smith,2345678902,XYZ Public School
+Mike Johnson,3456789012,Male,9th,Arts,STU003,David Johnson,3456789013,DEF International School
+Sarah Wilson,4567890123,Female,11th,Science,STU004,Lisa Wilson,4567890124,GHI Academy
+Tom Brown,5678901234,Male,8th,General,STU005,James Brown,5678901235,JKL School
+Emily Davis,6789012345,Female,10th,Science,STU006,Patricia Davis,6789012346,MNO Academy
+David Lee,7890123456,Male,12th,Commerce,STU007,Michael Lee,7890123457,PQR Institute
+Lisa Garcia,8901234567,Female,9th,Arts,STU008,Maria Garcia,8901234568,STU University
+Kevin Martinez,9012345678,Male,11th,Science,STU009,Carlos Martinez,9012345679,VWX College
+Amanda Rodriguez,0123456789,Female,10th,Commerce,STU010,Ana Rodriguez,0123456780,YZA School
+Chem5,Asiya ma'am,Ddarsh Gowani,,,,,,Chem,MYP-10th,Center - Breach candy,PTSL-005,,Ascend
+Chem5,Asiya ma'am,Ananya Agarwal ,,,,,,Chem,AS level,Center - Breach candy,PTSL-006,,ABWA
+Chem5,Asiya ma'am,Divyam ,,,,,,Chem,IG - 10th,Center - Breach candy,PTSL-007,,Cathedral
+Chem5,Asiya ma'am,Amira Menon ,,,,,,Chem,IBDP 2,Center - Breach candy,PTSL-008,,BIS
+Chem5,Asiya ma'am,Ishaan Talati ,,,,,,Chem,IG - 10th,Center - Breach candy,PTSL-009,,BIS
+Chem5,Asiya ma'am,Zen Sharma,,,,,,Chem,IG - 10th,Center - Breach candy,PTSL-010,,BIS
+Chem5,Asiya ma'am,Adit ,,,,,,Chem,IBDP 2,Center - Breach candy,PTSL-011,,BIS
+Chem5,Asiya ma'am,Shaurya Parasrampuria,,,,,,Chem,IBDP 2,Center - Breach candy,PTSL-012,,BIS
+Chem5,Asiya ma'am,Arihan ,,,,,,Chem,IBDP 1,Center - Breach candy,PTSL-013,,BIS
+Chem5,Asiya ma'am,Purab ,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-014,,BIS
+Chem5,Asiya ma'am,Kiaan ,,,,,,Chem,IG - 10th,Center - Breach candy,PTSL-015,,BIS
+Chem5,Asiya ma'am,Tanya ,,,,,,Chem,IG - 10th,Center - Breach candy,PTSL-016,,BIS
+Chem5,Asiya ma'am,Samara ,,,,,,Chem,IG - 10th,Center - Breach candy,PTSL-017,,BIS
+Chem5,Asiya ma'am,Tishya ,,,,,,Chem,IG - 10th,Center - Breach candy,PTSL-018,,BIS
+Chem5,Asiya ma'am,Aditya Sen,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-019,,Cathedral
+Chem5,Asiya ma'am,Nia ,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-020,,Cathedral
+Chem5,Asiya ma'am,Ibtida ,,,,,,Chem,IG - 10th,Center - Breach candy,PTSL-021,,HSIS
+Chem5,Asiya ma'am,Kiara ,,,,,,Chem,IBDP 1,Center - Breach candy,PTSL-022,,DAIS
+Chem5,Asiya ma'am,Nethra ,,,,,,Chem,IBDP 1,Center - Breach candy,PTSL-023,,DAIS
+Chem5,Asiya ma'am,Maahir Tanna ,,,,,,Chem,IG - 8th,Center - Breach candy,PTSL-024,,ABWA
+Chem5,Asiya ma'am,Maana Shah,,,,,,Chem,IBDP 1,Center - Breach candy,PTSL-025,,BDS
+Chem5,Asiya ma'am,Daiwik ,,,,,,Chem,IBDP 1,Center - Breach candy,PTSL-026,,BDS
+Chem5,Asiya ma'am,Gieve ,,,,,,Chem,IG - 10th,Online,PTSL-027,,JBCN
+Chem5,Asiya ma'am,Arhan ,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-028,,HSIS
+Chem5,Asiya ma'am,Aryan Parolia  ,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-029,,HSIS
+Chem5,Asiya ma'am,Aryan Gupta,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-030,,HSIS
+Chem5,Asiya ma'am,Mairaah Mohta ,,,,,,Chemistry ,IG - 9th,Center - Breach candy,PTSL-031,,JBCN
+Chem5,Asiya ma'am,Omar Patel,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-032,,ABWA
+Chem5,Asiya ma'am,kavvya,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-033,,ABWA
+Chem5,Asiya ma'am,Navya,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-034,,ABWA
+Chem5,Asiya ma'am,Jehan Langrana ,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-035,,BIS
+Chem1,Rohan sir ,Tarana ,,,,,,Chemistry ,IG - 9th,Center - Breach candy,PTSL-036,,BIS
+Chem1,Rohan sir ,Kiara Desai ,,,,,,Chemistry ,IBDP 1,CENTRE,PTSL-037,,DAIS
+Chem1,Rohan sir ,Vedika Shrivastava ,,,,,,Chemistry ,IBDP 1,CENTRE,PTSL-038,,HS
+Chem1,Rohan sir ,Shenaaya Sheth,,,,,,Chemistry ,IBDP 2,Center - Breach candy,PTSL-039,,HS
+Chem1,Rohan sir , Mahi Kejriwal,,,,,,Chemistry ,IG - 10th,Center - Breach candy,PTSL-040,,BIS
+Chem1,Rohan sir , Kabeer Kakad,,,,,,Chemistry ,IBDP 2,Center - Breach candy,PTSL-041,,BIS
+Chem1,Rohan sir ,Aanya Kapadia ,,,,,,Chemistry ,IBDP 2,Center - Breach candy,PTSL-042,,BIS
+Chem1,Rohan sir ,Aatharva Zaoba,,,,,,Chemistry ,IG - 10th,Center - Breach candy,PTSL-043,,HSIS
+Chem1,Rohan sir ,Anaisha Sheth ,,,,,,Chemistry ,IBDP 2,Center - Breach candy,PTSL-044,,HSIS
+Chem1,Rohan sir , Rahya Oswal,,,,,,Chemistry ,IBDP 2,Center - Breach candy,PTSL-045,,HSIS
+Chem1,Rohan sir ,Neel Shah ,,,,,,Chemistry ,IG - 10th,Center - Breach candy,PTSL-046,,BIS
+Chem1,Rohan sir ,Eka Ahluwalia ,,,,,,Chemistry ,IG - 10th,Center - Breach candy,PTSL-047,,DSB
+Chem1,Rohan sir ,Tamanna Sethia,,,,,,Chemistry ,IBDP 1,Center - Breach candy,PTSL-048,,HSIS
+Chem1,Rohan sir ,Zara Mehta,,,,,,Chemistry ,IBDP 1,Center - Breach candy,PTSL-049,,HSIS
+Chem1,Rohan sir ,Tiana Dalal,,,,,,Chemistry ,IBDP 1,CENTRE,PTSL-050,,DAIS
+Chem1,Rohan sir ,Iknoor Gill,,,,,,Chemistry ,IG - 10th,Center - Bandra,PTSL-051,,DAIS
+Chem1,Rohan sir ,Stuti Walia ,,,,,,Chemistry ,IBDP 1,Center - Bandra,PTSL-052,,DAIS
+Chem1,Rohan sir ,Divina Minocha,,,,,,Chemistry ,IBDP 1,Center - Bandra,PTSL-053,,DAIS
+Chem1,Rohan sir ,Aarav Hinduja ,,,,,,Chemistry ,IBDP 1,Center - Bandra,PTSL-054,,OIS
+Chem1,Rohan sir ,Ilaan Kapadia,,,,,,Chemistry ,IBDP 1,CENTRE,PTSL-055,,DAIS
+Chem1,Rohan sir ,Myrah Ratnani ,,,,,,Chemistry ,IBDP 1,Center - Bandra,PTSL-056,,DAIS
+Chem1,Rohan sir ,Ananya Ladda ,,,,,,Chemistry ,IBDP 1,Online,PTSL-057,,SI
+Chem1,Rohan sir ,Shlloka Mehta ,,,,,,Chemistry ,IBDP 1,CENTRE,PTSL-058,,DAIS
+Chem1,Rohan sir , Aditya Patil,,,,,,Chemistry ,IG - 10th,Home,PTSL-059,,DAIS
+Chem1,Rohan sir ,Alisha  Patil,,,,,,Chemistry ,IBDP 1,Home,PTSL-060,,DAIS
+Chem1,Rohan sir ,Shaun Mehta,,,,,,Chemistry ,IG - 10th,Center - Breach candy,PTSL-061,,HSIS
+Chem1,Rohan sir ,Viyaan Bijlani,,,,,,Chemistry ,IBDP 2,Center - Breach candy,PTSL-062,,HSIS
+Chem1,Rohan sir ,Aaria Varma,,,,,,Chemistry ,IBDP 1,Home,PTSL-063,,DAIS
+Chem1,Rohan sir ,Varun Vasudeva  (Home),,,,,,Chemistry ,IBDP 2,Home,PTSL-064,,ABWA
+Chem1,Rohan sir ,Aarav Gupta (home),,,,,,Chemistry ,IG - 10th,Home,PTSL-065,,CATHEDRAL 
+Chem1,Rohan sir ,Prayaan Kapoor,,,,,,Chemistry ,IBDP 1,Center - Bandra,PTSL-066,,OIS
+Chem1,Rohan sir ,Krishiv Gupta,,,,,,Chemistry ,IBDP 1,Center - Bandra,PTSL-067,,DAIS
+Chem1,Rohan sir ,Tara Burman,,,,,,Chemistry ,IG - 10th,Center - Breach candy,PTSL-068,,BIS
+Chem1,Rohan sir ,Dev Shah ,,,,,,Chemistry ,IG - 10th,Center - Breach candy,PTSL-069,,BIS
+Chem1,Rohan sir ,Kyra Mahendru ,,,,,,Chemistry ,IBDP 1,CENTRE,PTSL-070,,DAIS
+Chem1,Rohan sir ,Zahra ,,,,,,Chemistry ,IG - 9th,Center - Breach candy,PTSL-071,,BIS
+Chem1,Rohan sir ,Awantika Dutta ,,,,,,Chemistry ,IG - 9th,Center - Breach candy,PTSL-072,,BIS
+Chem1,Rohan sir ,Mira Sen ,,,,,,Chemistry ,IBDP 2,Center - Breach candy,PTSL-073,,BIS
+Chem1,Rohan sir ,Gayatri Mehta ,,,,,,Chemistry ,IBDP 2,Center - Breach candy,PTSL-074,,BIS
+Chem1,Rohan sir ,Meera Bhutani ,,,,,,Chemistry ,IBDP 2,Center - Breach candy,PTSL-075,,BIS
+Chem1,Rohan sir ,Kabir Parikh,,,,,,Chemistry ,IG - 10th,Center - Breach candy,PTSL-076,,BIS
+Chem1,Rohan sir ,Armaan Chahal ,,,,,,Chemistry ,IBDP 2,Center - Breach candy,PTSL-077,,HSIS
+Chem1,Rohan sir ,Anvi Kalothia ,,,,,,Chemistry ,IG - 10th,Center - Bandra,PTSL-078,,DAIS
+Chem1,Rohan sir ,Manveer ,,,,,,Chemistry ,IG - 9th,Center - Breach candy,PTSL-079,,JBCN
+Chem1,Rohan sir ,Ahaan,,,,,,Chemistry ,IG - 9th,Center - Breach candy,PTSL-080,,JBCN
+Chem1,Rohan sir ,Vivhaan ,,,,,,Chemistry ,IG - 9th,Center - Breach candy,PTSL-081,,JBCN
+Chem1,Rohan sir ,Malav Sanghvi ,,,,,,Chemistry ,IG - 9th,Center - Breach candy,PTSL-082,,JBCN
+Chem1,Rohan sir ,Navya Mundhra ,,,,,,Chemistry ,MYP-10th,Online,PTSL-083,,OIS 
+Chem3,Snehal ma'am,Swayam,,,,,,Chem,IG - 10th,Center - Breach candy,PTSL-084,,DY Patil
+Chem3,Snehal ma'am,Ayushi,,,,,,Chem,IBDP 2,Center - Breach candy,PTSL-085,,BIS
+Chem3,Snehal ma'am,Anahita,,,,,,Chem,A level,Online,PTSL-086,,ABWA
+Chem3,Snehal ma'am,Tvissha,,,,,,Chem,A level,Center - Breach candy,PTSL-087,,ABWA
+Chem3,Snehal ma'am,varnika/Varnika,,,,,,Chem,A level,Online,PTSL-088,,ABWA
+Chem3,Snehal ma'am,Airah,,,,,,Chem,A level,Center - Bandra,PTSL-089,,khar
+Chem3,Snehal ma'am,Ishita Attavar,,,,,,Chem,IBDP 2,Center - Bandra,PTSL-090,,OIS
+Chem3,Snehal ma'am,Vedant,,,,,,Chem,A level,Center - Breach candy,PTSL-091,,ABWA
+Chem3,Snehal ma'am,Jehan,,,,,,Chem,IBDP 2,Online,PTSL-092,,BIS
+Chem3,Snehal ma'am,Dhruv,,,,,,Chem,IBDP 1,Online,PTSL-093,,LINCON
+Chem3,Snehal ma'am,Hreehan,,,,,,Chem,IBDP 1,Online,PTSL-094,,SAINT JOHN
+Chem3,Snehal ma'am,Saphyra,,,,,,Chem,IBDP 1,Home,PTSL-095,,DAIS
+Chem3,Snehal ma'am,eka,,,,,,Chem,IG - 10th,Center - Breach candy,PTSL-096,,DSB
+Chem3,Snehal ma'am,Hitansh,,,,,,Chem,IG - 9th,Online,PTSL-097,,DAIS
+Chem3,Snehal ma'am,Hridaan,,,,,,Chem,MYP-9th,Center - Bandra,PTSL-098,,OIS
+Chem3,Snehal ma'am,Ria,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-099,,DAIS
+Chem3,Snehal ma'am,Ishaan,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-100,,DAIS
+Chem3,Snehal ma'am,Amartaya Lal,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-101,,DSB
+Chem3,Snehal ma'am,Miloni Martha,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-102,,BIS
+Chem3,Snehal ma'am,Anandi,,,,,,Chem,IBDP 1,Center - Bandra,PTSL-103,,Ecole
+Chem3,Snehal ma'am,Dev Khanna,,,,,,Chem,,Center - Breach candy,PTSL-104,,
+Chem3,Snehal ma'am,Mahira Jain,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-105,,HSIS
+Chem3,Snehal ma'am,Taashi,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-106,,HSIS
+Chem3,Snehal ma'am,Rheakapoor,,,,,,Chem,MYP-10th,Center - Breach candy,PTSL-107,,
+Chem3,Snehal ma'am,Ishaan,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-108,,DAIS
+Bio1,Nashra ma'am,Rohan kejriwal,,,,,,Bio,IG - 10th,Center - Breach candy,PTSL-109,,BIS
+Bio1,Nashra ma'am,Anaisha,,,,,,Bio,IBDP 2,Center - Breach candy,PTSL-110,,HSIS
+Bio1,Nashra ma'am,Div kothari,,,,,,Bio,IG - 10th,Center - Breach candy,PTSL-111,,BIS
+Bio1,Nashra ma'am,Ahaan,,,,,,Bio,IG - 10th,Center - Breach candy,PTSL-112,,BIS
+Bio1,Nashra ma'am,Priya,,,,,,Bio,IG - 10th,Center - Breach candy,PTSL-113,,BIS
+Bio1,Nashra ma'am,Ruhaan ,,,,,,Bio,IBDP 2,Online,PTSL-114,,Online
+Bio1,Nashra ma'am,Elisha,,,,,,Bio,IBDP 1,Center - Breach candy,PTSL-115,,Cathedral
+Bio1,Nashra ma'am,Ria sawant,,,,,,Bio,IBDP 2,Online,PTSL-116,,OIS
+Bio1,Nashra ma'am,Aanya chokhani,,,,,,Bio,IBDP 2,Center - Breach candy,PTSL-117,,BDS
+Bio1,Nashra ma'am,Umar patel,,,,,,Bio,IG - 10th,Center - Breach candy,PTSL-118,,DSB
+Bio1,Nashra ma'am,Samara Billimoria,,,,,,Bio,IG - 9th,Center - Breach candy,PTSL-119,,Cathedral
+Bio1,Nashra ma'am,Mairaah Mohta ,,,,,,Bio,IG - 9th,Center - Breach candy,PTSL-120,,JBCN
+Bio1,Nashra ma'am,Nia ,,,,,,Bio,IG - 9th,Center - Breach candy,PTSL-121,,Cathedral
+Econ3,Lalit sir,Aryan Diwan,,,,,,Economics,IBDP 2,Center - Breach candy,PTSL-122,,BIS
+Econ3,Lalit sir,Shubhun Aanchan,,,,,,Economics,IBDP 2,Center - Breach candy,PTSL-123,,BIS
+Econ3,Lalit sir,Reinaa Mehta,,,,,,Economics,IBDP 2,Center - Breach candy,PTSL-124,,BIS
+Econ3,Lalit sir,Yuvaan,,,,,,Economics,A level,Center - Breach candy,PTSL-125,,HSIS
+Econ3,Lalit sir,Kavir Kothari,,,,,,Business Management,IBDP 2,Center - Breach candy,PTSL-126,,BIS
+Econ3,Lalit sir,Aariya Shah,,,,,,Economics,IBDP 1,Center - Breach candy,PTSL-127,,BIS
+Econ3,Lalit sir,Vihaan,,,,,,Economics,IBDP 2,Center - Breach candy,PTSL-128,,BIS
+Econ3,Lalit sir,Gayatri Mehta,,,,,,Economics,IBDP 2,Center - Breach candy,PTSL-129,,BIS
+Econ3,Lalit sir,Kimaya,,,,,,Economics,IBDP 2,Center - Breach candy,PTSL-130,,Ascend IS
+Econ3,Lalit sir,Farah Doctor,,,,,,Economics,IBDP 1,Center - Breach candy,PTSL-131,,BIS
+Econ3,Lalit sir,Amatullah Poonawala,,,,,,Economics,IBDP 1,Center - Breach candy,PTSL-132,,BIS
+Econ3,Lalit sir,Kenisha Jain,,,,,,Economics,A level,Center - grant road,PTSL-133,,ABWA
+Econ3,Lalit sir,Nishka,,,,,,Economics,A level,Center - grant road,PTSL-134,,
+Econ3,Lalit sir,Prasham,,,,,,Economics,A level,Center - grant road,PTSL-135,,Fazlani
+Econ3,Lalit sir,Parth,,,,,,Economics,IBDP 1,Center - Breach candy,PTSL-136,,BIS
+Econ3,Lalit sir,Kabir Karkaria,,,,,,Economics,IBDP 1,Center - Breach candy,PTSL-137,,BIS
+Econ3,Lalit sir,Rayhan,,,,,,Economics,IBDP 1,Center - Breach candy,PTSL-138,,BIS
+Econ3,Lalit sir,Ishaan Munshaw,,,,,,Business Management,A level,Center - Breach candy,PTSL-139,,HSIS
+Econ3,Lalit sir,Ishaan Munshaw,,,,,,Economics,A level,Center - Breach candy,PTSL-140,,HSIS
+Econ3,Lalit sir,Zara,,,,,,Economics,IBDP 1,Center - Breach candy,PTSL-141,,
+Econ3,Lalit sir,Aryaveer,,,,,,Economics,IG - 10th,Center - Breach candy,PTSL-142,,DSB
+Econ3,Lalit sir,Rishan Mehta,,,,,,Business Management,AS level,Center - Breach candy,PTSL-143,,HSIS
+Econ3,Lalit sir,Rhea Premji,,,,,,Economics,IBDP 2,Online,PTSL-144,,
+Econ3,Lalit sir,Rohaan Premji,,,,,,Economics,IBDP 1,Online,PTSL-145,,
+Econ3,Lalit sir,Arrav Mehta,,,,,,Economics,IBDP 1,Home,PTSL-146,,HSIS
+Econ3,Lalit sir,Arihan,,,,,,Economics,IBDP 1,Home,PTSL-147,,BIS
+Econ3,Lalit sir,D Y Patil Group,,,,,,Economics,IG - 10th,Center - Breach candy,PTSL-148,,DY Patil
+Math4,Tanay K.,Tamanna Sethia,,,,,,Phy/Math AAHL,IBDP 1,Center - Breach candy,PTSL-149,,HSIS
+Math4,Tanay K.,Prathamesh Phadnis,,,,,,Add math,IG - 9th,Center - Breach candy,PTSL-150,,B D Somani
+Math4,Tanay K.,Rayhan,,,,,,Math AASL,IBDP 1,Center - Breach candy,PTSL-151,,BIS
+Math4,Tanay K.,Neil Tiwari,,,,,,Math AIHL,IBDP 2,Online,PTSL-152,,ACS Cobham
+Math4,Tanay K.,Samar Misra,,,,,,Math AIHL,IBDP 2,Online,PTSL-153,,ACS Cobham
+Math4,Tanay K.,Aaditya Thawani,,,,,,Math AIHL,IBDP 2,Online,PTSL-154,,ACS Cobham
+Math4,Tanay K.,Dhruv Jain,,,,,,Math AAHL,IBDP 1,Online,PTSL-155,,BIS
+Math4,Tanay K.,Pranit Bhatt,,,,,,Math AAHL,IBDP 1,Online,PTSL-156,,Anglo-Chinese SGP
+Math4,Tanay K.,Hrehaan Nathani,,,,,,Math AASL,IBDP 1,Online,PTSL-157,,BIS
+Math4,Tanay K.,Rhea Premji,,,,,,Math AIHL,IBDP 2,Online,PTSL-158,,Charter House UK
+Math4,Tanay K.,Vir Desai,,,,,,Math AIHL,IBDP 2,Center - Breach candy,PTSL-159,,Ascend Intl
+Math4,Tanay K.,Yohaan Dalal,,,,,,Math AIHL,IBDP 2,Center - Breach candy,PTSL-160,,Ascend Intl
+Math4,Tanay K.,Varun Vasudeva,,,,,,A Lvl Further Math,A level,Center - Breach candy,PTSL-161,,ABWA
+Math4,Tanay K.,Ananya Ladda,,,,,,Math AAHL,IBDP 1,Online,PTSL-162,,ABWA
+Math4,Tanay K.,Navyana ,,,,,,Math AASL,IBDP 1,Online,PTSL-163,,ABWA
+Mathcore,Zoheb sir,Tarini Kheruka,,,,,,Add math,IG - 9th,Center - peddar road,PTSL-164,,Cathedral
+Mathcore,Zoheb sir,ANANT MEHTA,,,,,,Add math,IG - 9th,Center - peddar road,PTSL-165,,BIS
+Mathcore,Zoheb sir,Ishaan Shah,,,,,,Add math,IG - 9th,Center - peddar road,PTSL-166,,BIS
+Mathcore,Zoheb sir,Anaya Bhartia,,,,,,Add math,IG - 9th,Center - peddar road,PTSL-167,,HSIS
+Mathcore,Zoheb sir,Navya Goenka,,,,,,Add math,IG - 9th,Home,PTSL-168,,BIS
+Mathcore,Zoheb sir,Sonakshi Patni,,,,,,Add math,IG - 9th,Home,PTSL-169,,BIS
+Mathcore,Zoheb sir,Raghav Jatia,,,,,,Add math,IG - 9th,Home,PTSL-170,,BIS
+Mathcore,Zoheb sir,Armaan Murthy,,,,,,Add math,IG - 10th,Center - peddar road,PTSL-171,,Cathedral
+Mathcore,Zoheb sir,Kabir Parikh,,,,,,Add math,IG - 10th,Home,PTSL-172,,BIS
+Mathcore,Zoheb sir,VIKRAM MOONDHRA,,,,,,Add math,IG - 10th,Home,PTSL-173,,BIS
+Mathcore,Zoheb sir,Neel Shah ,,,,,,Add math,IG - 10th,Center - peddar road,PTSL-174,,BIS
+Mathcore,Zoheb sir,Tara Burman,,,,,,Add math,IG - 10th,Center - peddar road,PTSL-175,,BIS
+Mathcore,Zoheb sir,AMAM SARUP,,,,,,Add math,IG - 10th,Home,PTSL-176,,BIS
+Mathcore,Zoheb sir,Kashvi Goel,,,,,,Math AAHL,IBDP 1,Center - peddar road,PTSL-177,,ABWA
+Mathcore,Zoheb sir,Sumer,,,,,,Math AAHL,IBDP 1,Center - peddar road,PTSL-178,,ABWA
+Mathcore,Zoheb sir,Surya Sehgal,,,,,,Math AAHL,IBDP 1,Center - peddar road,PTSL-179,,ABWA
+Mathcore,Zoheb sir,Athreya Seksaria,,,,,,Math AAHL,IBDP 1,Center - peddar road,PTSL-180,,ABWA
+Mathcore,Zoheb sir,KRITHVI KAUSHIK,,,,,,Math AAHL,IBDP 1,Center - peddar road,PTSL-181,,BIS
+Mathcore,Zoheb sir,Shanaya Shah,,,,,,Math AASL,IBDP 1,Center - peddar road,PTSL-182,,BIS
+Mathcore,Zoheb sir,Miraya Dalmia,,,,,,Math AASL,IBDP 1,Center - peddar road,PTSL-183,,BIS
+Mathcore,Zoheb sir,Aaryamann Goenka,,,,,,Math AAHL,IBDP 1,Home,PTSL-184,,BIS
+Mathcore,Zoheb sir,Tarini Patki,,,,,,Math AAHL,IBDP 1,Home,PTSL-185,,BIS
+Mathcore,Zoheb sir,Kabir Karkaria,,,,,,Math AAHL,IBDP 1,Center - peddar road,PTSL-186,,BIS
+Mathcore,Zoheb sir,KANAV PARIKH,,,,,,Math AAHL,IBDP 1,Center - peddar road,PTSL-187,,BIS
+Mathcore,Zoheb sir,DEVANSHI PAREKH,,,,,,Math AAHL,IBDP 1,Home,PTSL-188,,BIS
+Mathcore,Zoheb sir,MIHIKA SINGHI,,,,,,Math AAHL,IBDP 1,Center - peddar road,PTSL-189,,BIS
+Mathcore,Zoheb sir,VIHAAN TANAN,,,,,,Math AAHL,IBDP 1,Home,PTSL-190,,BIS
+Mathcore,Zoheb sir,Aariya Shah,,,,,,Math AAHL,IBDP 1,Home,PTSL-191,,BIS
+Mathcore,Zoheb sir,SHARANYA KHERUKA,,,,,,Math AASL,IBDP 1,Center - peddar road,PTSL-192,,Cathedral
+Mathcore,Zoheb sir,KABIR KAKKAD,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-193,,BIS
+Mathcore,Zoheb sir,HRIDAY RAJANI,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-194,,BIS
+Mathcore,Zoheb sir,ARJUN VORA,,,,,,Math AAHL,IBDP 2,Home,PTSL-195,,BIS
+Mathcore,Zoheb sir,Vedant Patodia,,,,,,Math AAHL,IBDP 2,Home,PTSL-196,,BIS
+Mathcore,Zoheb sir,Nyla Bajaj,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-197,,BIS
+Mathcore,Zoheb sir,MIRA SEN,,,,,,Math AASL,IBDP 2,Center - peddar road,PTSL-198,,BIS
+Mathcore,Zoheb sir,MEERA BHUTANI,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-199,,BIS
+Mathcore,Zoheb sir,Diyaan Shah,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-200,,BIS
+Mathcore,Zoheb sir,AYUSHI PATNAIK,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-201,,BIS
+Mathcore,Zoheb sir,VIHAAN SHAH,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-202,,BIS
+Mathcore,Zoheb sir,Shaurya Parasrampuria,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-203,,BIS
+Mathcore,Zoheb sir,KUMAIL BALDIWALA,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-204,,BIS
+Mathcore,Zoheb sir,VEDIKA MEHTA,,,,,,Math AASL,IBDP 2,Center - peddar road,PTSL-205,,BIS
+Mathcore,Zoheb sir,Amira Menon ,,,,,,Math AASL,IBDP 2,Center - peddar road,PTSL-008,,BIS
+Mathcore,Zoheb sir,Nirvaan Dhanuka,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-207,,BIS
+Mathcore,Zoheb sir,Aryan Diwan,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-208,,BIS
+Mathcore,Zoheb sir,Reinaa Mehta,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-209,,BIS
+Mathcore,Zoheb sir,PARAM,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-210,,BIS
+Mathcore,Zoheb sir,SIYA BHAGAT,,,,,,Math AAHL,IBDP 2,Online,PTSL-211,,BIS
+Mathcore,Zoheb sir,PEHR HARA,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-212,,DAIS
+Mathcore,Zoheb sir,ADITI MOONDHRA,,,,,,Math AAHL,IBDP 2,Center - peddar road,PTSL-213,,BIS
+Mathcore,Zoheb sir,Gia Gupta,,,,,,Math AAHL,IBDP 1,Center - peddar road,PTSL-214,,BIS
+Core2,Amir sir,Tanya ,,,,,,Phy,IG - 10th,Center - Breach candy,PTSL-215,,BIS
+Core2,Amir sir,Tishya ,,,,,,PHY,IG 10,Center - Breach candy,PTSL-216,,BIS
+Core2,Amir sir,Naira Negandhi,,,,,,PHY,IG 9th,Home,PTSL-217,,DAIS
+Core2,Amir sir,Arsh pandey,,,,,,PHY,A levels,Home,PTSL-218,,ABWA
+Core2,Amir sir,Ranvir chona,,,,,,PHY,IG 9TH,Home,PTSL-219,,BIS
+Core2,Amir sir,Div kothari,,,,,,PHY,IG 10,Center - Breach candy,PTSL-220,,BIS
+Core2,Amir sir,mikhail,,,,,,PHY,IG 10,Center - Breach candy,PTSL-221,,BIS
+Core2,Amir sir,Nivaan kothari,,,,,,PHY,IB HL,Center - Breach candy,PTSL-222,,ABWA
+Core2,Amir sir,Bhavya Churiwal,,,,,,PHY,IB SL,Home,PTSL-223,,HSIS
+Core2,Amir sir,Rohan Chandak,,,,,,PHY,IG 10,Center - Breach candy,PTSL-224,,BIS
+Core2,Amir sir,Ishaan,,,,,,PHY,IG 10,Center - Breach candy,PTSL-225,,BIS
+Core2,Amir sir,Zen Sharma,,,,,,PHY,IG 10,Center - Breach candy,PTSL-226,,BIS
+Core2,Amir sir,veer,,,,,,PHY,IG 9TH,Center - Breach candy,PTSL-227,,HSIS
+Core2,Amir sir,Devrath ,,,,,,PHY,IG 9TH,Home,PTSL-228,,HSIS
+Core2,Amir sir,Eka ahluwalia,,,,,,PHY,IG 10TH,Center - Breach candy,PTSL-229,,DSB
+Core2,Amir sir,Prathamesh Phadnis,,,,,,PHY,IG 9th,Center - Breach candy,PTSL-230,,BD SOMANI
+Core2,Amir sir,Nyah Bharwani ,,,,,,PHY,IG 10TH,Center - Breach candy,PTSL-231,,BIS
+Core2,Amir sir,Vishwaraj,,,,,,PHY,IG 9th,Home,PTSL-232,,HSIS
+Core2,Amir sir,Ivaan,,,,,,PHY,A levels,Center - Breach candy,PTSL-233,,BILLABONG
+Core2,Amir sir,Aryan kabra,,,,,,PHY,IG 10TH,Center - Breach candy,PTSL-234,,BIS
+Core2,Amir sir,Maahir Tanna ,,,,,,PHY,IG 8TH,Home,PTSL-235,,ABWA
+Core2,Amir sir,arman,,,,,,PHY,IG 9th,Center - Breach candy,PTSL-236,,BD SOMANI
+Core2,Amir sir,kabir merchant,,,,,,PHY,IG 10TH,Center - Breach candy,PTSL-237,,BIS
+Core2,Amir sir,Aryan,,,,,,PHY,IG 9TH,Center - Breach candy,PTSL-238,,HSIS
+Core2,Amir sir,Aryan,,,,,,PHY,IG 9TH,Center - Breach candy,PTSL-239,,HSIS
+Core2,Amir sir,Arhan ,,,,,,PHY,IG 9TH,Center - Breach candy,PTSL-240,,HSIS
+Econ1,Nishita ma'am,Tarashee Pujani,,,,,,Business ,IBDP 2,Center - Breach candy,PTSL-241,,JBCN
+Econ1,Nishita ma'am,Rihanna Rawal ,,,,,,Humanities,MYP-8th,Home,PTSL-242,,Ecole
+Econ1,Nishita ma'am,Vikram Mutreja ,,,,,,Business,IG - 9th,"Home, Online",PTSL-243,,Switzerland 
+Econ1,Nishita ma'am,Mairaah Mohta ,,,,,,Economics,IG - 9th,Center - Breach candy,PTSL-244,,JBCN
+Econ1,Nishita ma'am,Satvik ,,,,,,Economics,IG - 9th,"Home, Online",PTSL-245,,Singapore 
+Math1,Aziz sir,Ziv (Independent),,,,,,Math AAHL/ Ext Math,IG - 8th,Center - Bandra,PTSL-246,,Ecole
+Math1,Aziz sir,Divina (Independent),,,,,,Ext Math,IG - 10th,Home,PTSL-247,,Ascend
+Math1,Aziz sir,Divina Brother(independent),,,,,,Ext Math,IG - 8th,Home,PTSL-248,,Ascend
+Math1,Aziz sir,Saachi(Independent),,,,,,Math AASL,IBDP 1,Center - Breach candy,PTSL-249,,DSB
+Team3,Paresh sir,Nyah Bharwani ,,,,,,Int math,IG - 10th,Home,PTSL-250,,BIS
+Team3,Paresh sir,Jia shetty,,,,,,Ext Math,IG - 8th,Center - Bandra,PTSL-251,,ABWA
+Team3,Paresh sir,Aanya Bhatt,,,,,,MYP,IG - 7th,Center - Breach candy,PTSL-252,,HSIS
+Team3,Paresh sir,Satvik ,,,,,,Int math,IG - 9th,Online,PTSL-253,,Dulwich Singapore
+Team3,Paresh sir,Dhwaj ,,,,,,Ext Math,IG - 9th,Center - grant road,PTSL-254,,Fazlani
+Team3,Paresh sir,Mahir,,,,,,Ext Math,IG - 9th,Center - grant road,PTSL-255,,Fazlani
+Team3,Paresh sir,Aisha Mohatta,,,,,,Int math,IG - 9th,Home,PTSL-256,,HSIS
+Physics2,Anubhav sir,Aadya Kapoor,,,,,,Physics,IG -8th,Center - Breach candy,PTSL-257,,HSIS
+Physics2,Anubhav sir,Aashita,,,,,,Physics,10th ,Online,PTSL-258,,Dubai
+Physics2,Anubhav sir,Vir Sanghavi,,,,,,Physics,IBDP 2,Online,PTSL-259,,Rajasthan 
+Physics2,Anubhav sir,Atharva,,,,,,Physics,MYP-6,Center - Bandra,PTSL-260,,DAIS
+Physics2,Anubhav sir,Veer Kamat,,,,,,Physics,IG -8th,HOME,PTSL-261,,JBCN
+Physics2,Anubhav sir,Saanvi ,,,,,,Computer Science ,IBDP 2,Center - Breach candy,PTSL-262,,Podar
+Physics2,Anubhav sir,Bhavya,,,,,,Physics,IBDP 1,HOME,PTSL-263,,
+Physics2,Anubhav sir,Ishita Attavar(Revision),,,,,,Physics,IBDP 2,Center - Bandra,PTSL-264,,OIS
+Physics2,Anubhav sir,Ruday(Revision),,,,,,Physics,IBDP 2,Online,PTSL-265,,Belgium 
+Physics2,Anubhav sir,Kavir Kothari(Revision),,,,,,Physics,IBDP 2,Center - Breach candy,PTSL-266,,BIS
+Physics2,Anubhav sir,Nivaan Kothari,,,,,,Physics,IBDP 2,Center - Breach candy,PTSL-267,,
+Physics2,Anubhav sir,Ayushi,,,,,,Physics,IBDP 2,Online,PTSL-268,,
+Physics2,Anubhav sir,Shanaya,,,,,,Physics,10th ,Online,PTSL-269,,Dubai
+Physics2,Anubhav sir,Ivaan,,,,,,Physics,AS LEVEL,Center - Breach candy,PTSL-270,,
+Physics2,Anubhav sir,Manav,,,,,,Physics,IG -8th,HOME,PTSL-271,,JBCN
+Physics2,Anubhav sir,Jehan,,,,,,Phy - SL,IBDP 2,HOME,PTSL-272,,Canada
+Physics2,Anubhav sir,Ishanvi,,,,,,Phy - HL,IBDP 2,Online,PTSL-273,,OIS
+Science1,Ayesha ma'am,Airah Khandelwal,,,,,,Chem,IG - 10th,"Home, Center - Breach candy",PTSL-274,,BIS
+Science1,Ayesha ma'am,Aadya Kapoor,,,,,,Chem/Bio,IG - 9th,Center - Breach candy,PTSL-275,,HSIS
+Science1,Ayesha ma'am,Priya,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-276,,BIS
+Science1,Ayesha ma'am,Ahaan Kapadia,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-277,,BIS
+Science1,Ayesha ma'am,Naisha Kanodia,,,,,,Chem,IG - 10th,Home,PTSL-278,,DAIS
+Science1,Ayesha ma'am,Ranvir chona,,,,,,Chem,IG 9TH,Home,PTSL-279,,BIS
+Science1,Ayesha ma'am,Ishaan Gandhi,,,,,,Chem,IG - 10th,Center - Breach candy,PTSL-280,,ABWA
+Science1,Ayesha ma'am,Umar Patel,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-281,,DSB
+Science1,Ayesha ma'am,Vedika Parikh  ,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-282,,DAIS
+Science1,Ayesha ma'am,Vardaan Gupta,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-283,,DAIS
+Science1,Ayesha ma'am,Prathamesh Phadnis,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-284,,BDS
+Science1,Ayesha ma'am,Vivaan Parekh,,,,,,Chem,IG - 9th,Center - Breach candy,PTSL-285,,DAIS
+Science1,Ayesha ma'am,Veer Jasani,,,,,,Bio,IG - 10th,Home,PTSL-286,,Cathedral
+Core1,Uzair sir,Ahaan,,,,,,physics,9th,Center - Breach candy,PTSL-287,,BIS
+Core1,Uzair sir,Ibbtida Maheshwari,,,,,,physics,10th,Center - Breach candy,PTSL-288,,HSIS
+Core1,Uzair sir,Priya ,,,,,,physics,9th,Center - Breach candy,PTSL-289,,BIS
+Core1,Uzair sir,Mehr Shah,,,,,,physics,10th,Center - Breach candy,PTSL-290,,HSIS
+Core1,Uzair sir,Hrehansh,,,,,,Global perspective ,9th,Center - Breach candy,PTSL-291,,HSIS
+Core1,Uzair sir,JBCN boys,,,,,,physics,9th,Center - Breach candy,PTSL-292,,JBCN
+Core1,Uzair sir,Aishi,,,,,,physics,9th,Center - Breach candy,PTSL-293,,JBCN
+Core1,Uzair sir,tanvi,,,,,,Physics,9th,Home tuition,PTSL-294,,JBCN
+Core1,Uzair sir,Rhea Goyal,,,,,,Physics,10th,Center - Breach candy,PTSL-295,,HSIS
+Core1,Uzair sir,Anaya Goyal,,,,,,Physics,10th,Center - Breach candy,PTSL-296,,HSIS
+Core1,Uzair sir,Omar Patel,,,,,,Physics,9th,Center - Breach candy,PTSL-297,,DSB
+Core1,Uzair sir,Aatharva Zaoba,,,,,,Physics,IG - 10th,Center - Breach candy,PTSL-298,,HSIS
+Core1,Uzair sir,Tarini,,,,,,Physics,10th,Center - Breach candy,PTSL-299,,HSIS
+Core1,Uzair sir,Reyansh,,,,,,Physics,9th,Center - Breach candy,PTSL-300,,HSIS
+Core1,Uzair sir,Twins Sadarangani,,,,,,Combined Sciences,6th,Home tuition,PTSL-301,,HSIS
+Core1,Uzair sir,Dharini Shah,,,,,,DT,12th,Home tuition,PTSL-302,,DSB
+Core1,Uzair sir,Ishaan Munshaw,,,,,,GP,A Levels,Center - Breach candy,PTSL-303,,HSIS
+Core1,Uzair sir,Vikram,,,,,,History/Geo,9th,Home tuition,PTSL-304,,Boarding School
+Core1,Uzair sir,Myrah,,,,,,Physics ,9th,Center - Bandra,PTSL-305,,DAIS
+Core1,Uzair sir,Shiv Kapur ,,,,,,History ia/EE,11th,Online,PTSL-306,,Singapore
+Core1,Uzair sir,sasha ,,,,,,physics/chem,8th,Online,PTSL-307,,uae
+Core1,Uzair sir,Veer,,,,,,Physics ,9th,Center - Breach candy,PTSL-308,,HSIS
+Physics1,Harsh sir,Shreya Thakker,,,,,,Phy,MYP-10th,Home,PTSL-309,,OIS
+Physics1,Harsh sir,Siddhi,,,,,,Phy,MYP-10th,Home,PTSL-310,,OIS
+Physics1,Harsh sir,Purushottam Dalvie,,,,,,Phy - HL,IBDP 1,Home,PTSL-311,,OIS
+Physics1,Harsh sir,Raghav Dalvie,,,,,,Phy,MYP-10th,Home,PTSL-312,,OIS
+Physics1,Harsh sir,Divina Ramnani,,,,,,Phy,MYP-10th,Home,PTSL-313,,BIS
+Physics1,Harsh sir,Rishit Gupta,,,,,,Phy - SL,IBDP 1,Online,PTSL-314,,BIS
+Physics1,Harsh sir,Ishanvi Singh,,,,,,Phy - HL,IBDP 2,Online,PTSL-315,,BIS
+Physics1,Harsh sir,Vir Sanghvi,,,,,,Phy - HL,IBDP 2,Online,PTSL-316,,JPIS
+Physics1,Harsh sir,Neil Tiwari ,,,,,,Phy - HL,IBDP 2,Online,PTSL-317,,BIS
+Physics1,Harsh sir,Surya Sami,,,,,,Phy - HL,IBDP 1,Center - Breach candy,PTSL-318,,BIS
+Physics1,Harsh sir,Aman Doshi,,,,,,Phy,IBDP 1,Center - Breach candy,PTSL-319,,Cathedral
+Physics1,Harsh sir,Ddarsh Gowani,,,,,,Phy,MYP-10th,Center - Breach candy,PTSL-320,,BIS
+Physics1,Harsh sir,Suhaani Mehta,,,,,,Phy - HL,IBDP 2,Center - Breach candy,PTSL-321,,BIS
+Physics1,Harsh sir,Abisha Jhavar,,,,,,Phy,IG - 10th,Center - Breach candy,PTSL-322,,ABWA
+Physics1,Harsh sir,Maanya Sanghvi,,,,,,Phy,IG - 10th,Center - Breach candy,PTSL-323,,ABWA
+Physics1,Harsh sir,Anaya Bhartia,,,,,,Phy,IG - 9th,Center - Breach candy,PTSL-324,,HSIS
+Physics1,Harsh sir,Pranit,,,,,,Phy - HL,IBDP 2,Online,PTSL-325,,BIS
+Physics1,Harsh sir,Jehan Langrana ,,,,,,Phy,IG - 9th,Center - Breach candy,PTSL-326,,BIS
+MAT1,Ritesh Sir,Nia,,,,,,Int math,IG - 9th,Center - Breach candy,PTSL-327,,Cathedral
+MAT1,Ritesh Sir,Dev Khanna,,,,,,Phy,,Center - Breach candy,PTSL-328,,
+Chem2,Praveen sir,lia lalkaka,,,,,,Bio,IBDP 2,Center - Breach candy,PTSL-329,,BIS
+Chem2,Praveen sir,Vishwaraj,,,,,,Chem/bio,IG - 9th,Home,PTSL-330,,HSIS
+Chem2,Praveen sir,Aryan Kabra,,,,,,Chem/bio,IG - 10th,Center - Breach candy,PTSL-331,,BIS
+Chem2,Praveen sir,mikhail,,,,,,chem,IG - 10th,Center - Breach candy,PTSL-332,,BIS
+Chem2,Praveen sir,Armaan,,,,,,Chem/bio,IG-8th,Center - Bandra,PTSL-333,,BDS
+Chem2,Praveen sir,Vikram,,,,,,Chem/bio,IG - 9th,Online,PTSL-334,,DSB
+Chem2,Praveen sir,Veer,,,,,,Chem/bio,IG - 9th,Home,PTSL-335,,Ascend Intl
+Chem4,Kiron ma'am,Reeva,,,,,,Chem - HL,IBDP 1,Center - Breach candy,PTSL-336,,HSIS

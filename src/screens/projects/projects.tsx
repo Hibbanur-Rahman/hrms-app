@@ -550,7 +550,11 @@ const Projects = () => {
             <View className="w-full flex flex-row items-center justify-between gap-2 pt-2">
               <AnimatedButton
                 className="flex-row items-center gap-2 bg-indigo-50 border border-indigo-200 rounded-xl px-4 py-2.5"
-                onPress={() => {}}
+                onPress={() => {
+                  navigation.navigate('Tasks', {
+                    projectId: project?._id,
+                  })
+                }}
               >
                 <Feather name="eye" size={16} color="#4F46E5" />
                 <Text

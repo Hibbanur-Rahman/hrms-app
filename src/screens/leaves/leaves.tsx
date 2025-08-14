@@ -66,8 +66,7 @@ const Leaves = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const { user } = useSelector((state: any) => state.auth);
-  const [selectedMonth, setSelectedMonth] = useState<any>(null);
-  const [selectedYear, setSelectedYear] = useState<any>(null);
+
   const [addLeaveApplicationModalVisible, setAddLeaveApplicationModalVisible] =
     useState(false);
   // Animation values
@@ -98,6 +97,9 @@ const Leaves = () => {
     { label: '2024', value: '2024' },
     { label: '2025', value: '2025' },
   ];
+
+  const [selectedMonth, setSelectedMonth] = useState<any>(months[new Date().getMonth()]|| null);
+  const [selectedYear, setSelectedYear] = useState<any>(years.find(year => year.value === new Date().getFullYear().toString()) || null);
 
   //handle get leaves
   const handleGetLeaves = async () => {
@@ -590,10 +592,7 @@ const Leaves = () => {
           {/* Leaves List */}
           <View className="mt-6 pb-6">
             {loading && (
-              <Animated.View
-                entering={FadeInUp.springify()}
-                className="w-full"
-              >
+              <Animated.View entering={FadeInUp.springify()} className="w-full">
                 <LeaveSkeleton count={3} />
               </Animated.View>
             )}

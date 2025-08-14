@@ -32,6 +32,8 @@ import PrivacyPolicy from './src/screens/privacyPolicy/privacyPolicy';
 import Expense from './src/screens/expense/expense';
 import Sessions from './src/screens/sessions/sessions';
 import StudentDetails from './src/screens/students/studentDetails';
+import Tasks from './src/screens/projects/tasks';
+import TaskDetails from './src/screens/projects/taskDetails';
 
 enableScreens();
 
@@ -51,7 +53,12 @@ export type RootStackParamList = {
   PrivacyPolicy: undefined;
   Expense: undefined;
   Sessions: undefined;
-
+  Tasks: {
+    projectId: string;
+  };
+  TaskDetails:{
+    taskId: string;
+  }
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -122,7 +129,16 @@ function AppContent() {
           component={Layout}
           options={{ headerShown: false }}
         />
-
+        <Stack.Screen
+          name="Tasks"
+          component={Tasks}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TaskDetails"
+          component={TaskDetails}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Notification"
           component={Notification}
@@ -173,7 +189,6 @@ function AppContent() {
           component={PrivacyPolicy}
           options={{ headerShown: false }}
         />
-       
       </Stack.Navigator>
     </NavigationContainer>
   );

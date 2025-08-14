@@ -7,22 +7,26 @@ const GetAllEmployees = async () =>
     secure: true,
   });
 
-  const GetAllProjects = async (params?: { page?: number; limit?: number; search?: string }) => {
-    const queryParams = new URLSearchParams();
-    
-    if (params?.page) queryParams.append('page', params.page.toString());
-    if (params?.limit) queryParams.append('limit', params.limit.toString());
-    if (params?.search) queryParams.append('search', params.search);
-    
-    const queryString = queryParams.toString();
-    const url = queryString ? `project/user?${queryString}` : 'project/user';
-    
-    return Request({
-      url,
-      method: 'get',
-      secure: true,
-    });
-  };
+const GetAllProjects = async (params?: {
+  page?: number;
+  limit?: number;
+  search?: string;
+}) => {
+  const queryParams = new URLSearchParams();
+
+  if (params?.page) queryParams.append('page', params.page.toString());
+  if (params?.limit) queryParams.append('limit', params.limit.toString());
+  if (params?.search) queryParams.append('search', params.search);
+
+  const queryString = queryParams.toString();
+  const url = queryString ? `project/user?${queryString}` : 'project/user';
+
+  return Request({
+    url,
+    method: 'get',
+    secure: true,
+  });
+};
 
 const CreateProject = async (payload: any) =>
   Request({
@@ -49,21 +53,42 @@ const UpdateProject = async (id: string, payload: any) =>
     files: true,
   });
 
-  const GetProjectById = async (id: string) =>
+const GetProjectById = async (id: string) =>
   Request({
     url: `project/${id}`,
     method: 'get',
     secure: true,
   });
 
+const GetProjectTasks = async ({id, page, limit, search, status, priority}:{
+  id: string;
+  page: number;
+  limit: number;
+  search: string;
+  status: string;
+  priority: string;
+}) =>
+  Request({
+    url: `project/${id}/tasks`,
+    method: 'GET',
+    secure: true,
+    params: {
+      page,
+      limit,
+      search,
+      status,
+      priority
+    }
+  });
 
 const ProjectService = {
-  GetAllEmployees, 
+  GetAllEmployees,
   GetAllProjects,
   CreateProject,
   DeleteProject,
   UpdateProject,
   GetProjectById,
+  GetProjectTasks,
 };
 
 export default ProjectService;

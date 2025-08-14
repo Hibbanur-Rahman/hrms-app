@@ -92,7 +92,7 @@ const MenuItem: React.FC<MenuItemProps> = ({
 const Profile = () => {
   const navigation = useNavigation<NavigationProp>();
   const user = useSelector((state: RootState) => state.auth.user);
-  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string | null>(user?.profileImage || null);
 
   useEffect(() => {
     // Load profile image from storage if exists
@@ -266,7 +266,7 @@ const Profile = () => {
             <View className="items-center">
               {/* Profile Image */}
               <View className="relative mb-4">
-                <View className="w-24 h-24 rounded-full bg-gray-200 items-center justify-center overflow-hidden">
+                <View className="w-24 h-24 rounded-full bg-gray-200 items-center justify-center overflow-hidden border border-gray-200">
                   {profileImage ? (
                     <Image
                       source={{ uri: profileImage }}

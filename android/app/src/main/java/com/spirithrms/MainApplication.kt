@@ -1,4 +1,4 @@
-package com.hrmsapp
+package com.spirithrms
 
 import android.app.Application
 import com.facebook.react.PackageList

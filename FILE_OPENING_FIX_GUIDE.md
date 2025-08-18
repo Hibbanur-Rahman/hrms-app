@@ -1,7 +1,7 @@
 # File Opening Issue Fix Guide
 
 ## Problem Summary
-The error `file:///data/user/0/com.hrmsapp/files/...pdf exposed beyond app through Intent.getData()` occurs because:
+The error `file:///data/user/0/com.spirithrms/files/...pdf exposed beyond app through Intent.getData()` occurs because:
 
 1. **Security Restriction**: Android doesn't allow sharing `file://` URIs from app-private directories
 2. **FileProvider Required**: Must use content URIs for secure file sharing

@@ -69,6 +69,7 @@ import LeaveService from '../../services/LeaveService';
 import SalarySlipService from '../../services/SalarySlipService';
 import ReactNativeBlobUtil from 'react-native-blob-util';
 import SalarySlipPDFViewer from '../../components/SalarySlipPDFViewer';
+import { formatDistance } from '../../utils/distance';
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const getStatusColor = (status: string) => {
@@ -434,13 +435,16 @@ const Home = () => {
   const handleDownloadSlips = async (id: string) => {
     try {
       setDownloadingSlipId(id);
-      console.log("downloading slip id:", id);
-      
+      console.log('downloading slip id:', id);
+
       // Request storage permission on Android
       if (Platform.OS === 'android') {
         // For Android 11+ (API 30+), we need to handle scoped storage differently
-        const androidVersion = typeof Platform.Version === 'number' ? Platform.Version : parseInt(String(Platform.Version));
-        
+        const androidVersion =
+          typeof Platform.Version === 'number'
+            ? Platform.Version
+            : parseInt(String(Platform.Version));
+
         if (androidVersion >= 30) {
           // Android 11+ uses scoped storage, check if we can write to downloads
           try {
@@ -459,38 +463,39 @@ const Home = () => {
                   style: 'cancel',
                   onPress: () => {
                     return;
-                  }
+                  },
                 },
                 {
                   text: 'Continue',
                   onPress: () => {
                     // For Android 11+, we'll try to download anyway as the system may handle it
                     console.log('Continuing with download on Android 11+');
-                  }
-                }
-              ]
+                  },
+                },
+              ],
             );
           }
         } else {
           // For Android 10 and below, use traditional permissions
           const hasPermission = await PermissionsAndroid.check(
-            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
           );
-          
+
           if (!hasPermission) {
             const granted = await PermissionsAndroid.request(
               PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
               {
                 title: 'Storage Permission Required',
-                message: 'This app needs access to storage to download salary slips to your device.',
+                message:
+                  'This app needs access to storage to download salary slips to your device.',
                 buttonNeutral: 'Ask Me Later',
                 buttonNegative: 'Cancel',
                 buttonPositive: 'Allow',
               },
             );
-            
-            console.log("permission granted:", granted);
-            
+
+            console.log('permission granted:', granted);
+
             if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
               Alert.alert(
                 'Permission Required',
@@ -506,13 +511,13 @@ const Home = () => {
                       Linking.openSettings();
                     },
                   },
-                ]
+                ],
               );
               return;
             } else if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
               Alert.alert(
-                'Permission Denied', 
-                'Storage permission is required to download files. Please try again and allow the permission.'
+                'Permission Denied',
+                'Storage permission is required to download files. Please try again and allow the permission.',
               );
               return;
             }
@@ -520,26 +525,36 @@ const Home = () => {
         }
       }
 
-      Alert.alert('Download Started', 'Your salary slip is being downloaded...');
-      
+      Alert.alert(
+        'Download Started',
+        'Your salary slip is being downloaded...',
+      );
+
       const response = await SalarySlipService.DownloadSalarySlip(id);
-      console.log("response of download slips response:", response?.data);
-      
+      console.log('response of download slips response:', response?.data);
+
       // Configure download path - prefer Downloads folder for better accessibility
       const { fs } = ReactNativeBlobUtil;
       const currentDate = new Date();
-      const fileName = `salary_slip_${currentDate.getFullYear()}_${(currentDate.getMonth() + 1).toString().padStart(2, '0')}_${id}.pdf`;
-      
+      const fileName = `salary_slip_${currentDate.getFullYear()}_${(
+        currentDate.getMonth() + 1
+      )
+        .toString()
+        .padStart(2, '0')}_${id}.pdf`;
+
       let downloadPath;
       let downloadMethod = 'downloads';
-      
+
       try {
         // Always try to use Downloads folder first for better file access
         downloadPath = `${fs.dirs.DownloadDir}/${fileName}`;
         downloadMethod = 'downloads';
       } catch (error) {
         // Fallback to app's document directory if Downloads folder is not accessible
-        console.log('Downloads folder not accessible, using app directory:', error);
+        console.log(
+          'Downloads folder not accessible, using app directory:',
+          error,
+        );
         downloadPath = `${fs.dirs.DocumentDir}/${fileName}`;
         downloadMethod = 'app_storage';
       }
@@ -548,15 +563,15 @@ const Home = () => {
       if (response?.data) {
         // Handle different response formats
         let pdfData = response.data;
-        
+
         // If the response is wrapped in another object, extract the PDF data
         if (typeof response.data === 'object' && response.data.data) {
           pdfData = response.data.data;
         }
-        
+
         // Convert blob or other data formats to base64
         let base64Data = '';
-        
+
         if (typeof pdfData === 'string') {
           if (pdfData.startsWith('%PDF')) {
             // Raw PDF data - convert to base64
@@ -593,7 +608,7 @@ const Home = () => {
             return;
           }
         }
-        
+
         // Write the base64 PDF data to the file
         if (base64Data && base64Data.length > 0) {
           await fs.writeFile(downloadPath, base64Data, 'base64');
@@ -601,81 +616,84 @@ const Home = () => {
           Alert.alert('Error', 'Invalid PDF data format for download');
           return;
         }
-        
+
         let downloadMessage = '';
         if (downloadMethod === 'app_storage') {
           downloadMessage = `Salary slip saved to app documents as ${fileName}`;
         } else {
           downloadMessage = `Salary slip downloaded to Downloads folder as ${fileName}`;
         }
-        
-        Alert.alert(
-          'Download Complete', 
-          downloadMessage,
-          [
-            {
-              text: 'Open',
-              onPress: async () => {
+
+        Alert.alert('Download Complete', downloadMessage, [
+          {
+            text: 'Open',
+            onPress: async () => {
+              try {
+                if (Platform.OS === 'android') {
+                  console.log('Opening file path on Android:', downloadPath);
+                  // Use react-native-blob-util's android method to open files safely
+                  await ReactNativeBlobUtil.android.actionViewIntent(
+                    downloadPath,
+                    'application/pdf',
+                  );
+                } else {
+                  // For iOS, use the file:// scheme
+                  const filePath = `file://${downloadPath}`;
+                  await Linking.openURL(filePath);
+                }
+              } catch (error) {
+                console.log('error while opening file:', error);
+
+                // Fallback: Try to share the file instead
                 try {
                   if (Platform.OS === 'android') {
-                    console.log("Opening file path on Android:", downloadPath);
-                    // Use react-native-blob-util's android method to open files safely
-                    await ReactNativeBlobUtil.android.actionViewIntent(downloadPath, 'application/pdf');
-
+                    // Use the Share API as a fallback
+                    await Share.share({
+                      title: 'Salary Slip',
+                      message: 'Please find your salary slip attached',
+                      url: `file://${downloadPath}`,
+                    });
                   } else {
-                    // For iOS, use the file:// scheme
-                    const filePath = `file://${downloadPath}`;
-                    await Linking.openURL(filePath);
-                  }
-                } catch (error) {
-                  console.log("error while opening file:", error);
-                  
-                  // Fallback: Try to share the file instead
-                  try {
-                    if (Platform.OS === 'android') {
-                      // Use the Share API as a fallback
-                      await Share.share({
-                        title: 'Salary Slip',
-                        message: 'Please find your salary slip attached',
-                        url: `file://${downloadPath}`,
-                      });
-                    } else {
-                      Alert.alert('Error', 'Could not open the downloaded file. Please check your Downloads folder.');
-                    }
-                  } catch (shareError) {
-                    console.log("error while sharing file:", shareError);
                     Alert.alert(
-                      'Cannot Open File', 
-                      'The file was downloaded successfully, but could not be opened. Please check your file manager or install a PDF viewer app.',
-                      [
-                        {
-                          text: 'Install PDF Viewer',
-                          onPress: () => {
-                            const storeUrl = Platform.OS === 'android' 
-                              ? 'market://search?q=pdf+viewer'
-                              : 'https://apps.apple.com/search?term=pdf+viewer';
-                            Linking.openURL(storeUrl);
-                          }
-                        },
-                        { text: 'OK' }
-                      ]
+                      'Error',
+                      'Could not open the downloaded file. Please check your Downloads folder.',
                     );
                   }
+                } catch (shareError) {
+                  console.log('error while sharing file:', shareError);
+                  Alert.alert(
+                    'Cannot Open File',
+                    'The file was downloaded successfully, but could not be opened. Please check your file manager or install a PDF viewer app.',
+                    [
+                      {
+                        text: 'Install PDF Viewer',
+                        onPress: () => {
+                          const storeUrl =
+                            Platform.OS === 'android'
+                              ? 'market://search?q=pdf+viewer'
+                              : 'https://apps.apple.com/search?term=pdf+viewer';
+                          Linking.openURL(storeUrl);
+                        },
+                      },
+                      { text: 'OK' },
+                    ],
+                  );
                 }
-              },
+              }
             },
-            { text: 'OK' },
-          ]
-        );
+          },
+          { text: 'OK' },
+        ]);
       } else {
         Alert.alert('Error', 'No data received for download');
       }
     } catch (error: any) {
-
-      console.log("error while download slips:", error);
+      console.log('error while download slips:', error);
       Alert.alert(
         'Download Failed',
-        error?.data?.message || error?.message || 'Failed to download salary slip'
+        error?.data?.message ||
+          error?.message ||
+          'Failed to download salary slip',
       );
     } finally {
       setDownloadingSlipId('');
@@ -686,26 +704,26 @@ const Home = () => {
   const handleViewSlips = async (id: string) => {
     try {
       setViewingSlipId(id);
-      
+
       const response = await SalarySlipService.ViewSalarySlip(id);
-      console.log("response of view slips response:", response?.data);
-      
+      console.log('response of view slips response:', response?.data);
+
       if (response?.data) {
         // Handle different response formats
         let pdfData = response.data;
-        
+
         // If the response is wrapped in another object, extract the PDF data
         if (typeof response.data === 'object' && response.data.data) {
           pdfData = response.data.data;
         }
-        
+
         // Check if we have valid PDF data
         if (typeof pdfData === 'string' && pdfData.length > 0) {
           // Create a temporary file for viewing in a more accessible location
           const { fs } = ReactNativeBlobUtil;
           const currentDate = new Date();
           const fileName = `temp_salary_slip_${currentDate.getTime()}.pdf`;
-          
+
           // Use external cache directory which is more accessible for viewing
           let viewPath;
           try {
@@ -715,10 +733,10 @@ const Home = () => {
             // Fallback to regular cache
             viewPath = `${fs.dirs.CacheDir}/${fileName}`;
           }
-          
+
           // Convert data to base64 if needed and write to file
           let base64Data = '';
-          
+
           if (pdfData.startsWith('%PDF')) {
             // Raw PDF data - convert to base64
             base64Data = ReactNativeBlobUtil.base64.encode(pdfData);
@@ -729,15 +747,21 @@ const Home = () => {
             // Assume it's already base64
             base64Data = pdfData;
           }
-          
+
           // Write the base64 PDF data to a temporary file
           await fs.writeFile(viewPath, base64Data, 'base64');
-          
+
           console.log('PDF saved for viewing at:', viewPath);
-          
+
           // Set the PDF preview state
           setPdfUri(`file://${viewPath}`);
-          setPdfFileName(`Salary Slip - ${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}`);
+          setPdfFileName(
+            `Salary Slip - ${currentDate.getFullYear()}-${(
+              currentDate.getMonth() + 1
+            )
+              .toString()
+              .padStart(2, '0')}`,
+          );
           setCurrentSalarySlipId(id);
           setPdfPreviewVisible(true);
         } else if (pdfData instanceof Blob) {
@@ -747,18 +771,24 @@ const Home = () => {
             const currentDate = new Date();
             const fileName = `temp_salary_slip_${currentDate.getTime()}.pdf`;
             const viewPath = `${fs.dirs.CacheDir}/${fileName}`;
-            
+
             // Convert Blob to base64
             const reader = new FileReader();
             reader.onload = async () => {
               const result = reader.result as string;
               const base64Data = result.split(',')[1]; // Remove data URL prefix
-              
+
               await fs.writeFile(viewPath, base64Data, 'base64');
-              
+
               // Set the PDF preview state
               setPdfUri(`file://${viewPath}`);
-              setPdfFileName(`Salary Slip - ${currentDate.getFullYear()}-${(currentDate.getMonth() + 1).toString().padStart(2, '0')}`);
+              setPdfFileName(
+                `Salary Slip - ${currentDate.getFullYear()}-${(
+                  currentDate.getMonth() + 1
+                )
+                  .toString()
+                  .padStart(2, '0')}`,
+              );
               setCurrentSalarySlipId(id);
               setPdfPreviewVisible(true);
             };
@@ -774,10 +804,10 @@ const Home = () => {
         Alert.alert('Error', 'No PDF data received');
       }
     } catch (error: any) {
-      console.log("error while viewing slips:", error);
+      console.log('error while viewing slips:', error);
       Alert.alert(
         'View Failed',
-        error?.data?.message || error?.message || 'Failed to view salary slip'
+        error?.data?.message || error?.message || 'Failed to view salary slip',
       );
     } finally {
       setViewingSlipId('');
@@ -813,7 +843,6 @@ const Home = () => {
     }, [isCheckedIn, isCheckedOut]),
   );
 
-  
   return (
     <SafeAreaView className="flex-1 bg-white">
       {/* Loading Modal */}
@@ -895,12 +924,15 @@ const Home = () => {
                       Checked In
                     </Text>
                     {todayAttendance?.checkIn?.distance && (
-                      <Text
-                        className="text-gray-500 text-xs"
-                        style={{ fontFamily: 'Poppins-Regular' }}
-                      >
-                        {Math.round(todayAttendance.checkIn.distance)}m away
-                      </Text>
+                      <View className="flex flex-row items-center gap-1">
+                        <MapPin size={12} color="gray" />
+                        <Text
+                          className="text-gray-500 text-xs"
+                          style={{ fontFamily: 'Poppins-Regular' }}
+                        >
+                          {formatDistance(Math.round(todayAttendance.checkIn.distance))} away
+                        </Text>
+                      </View>
                     )}
                   </View>
                   <CircleArrowOutDownLeft
@@ -934,12 +966,15 @@ const Home = () => {
                       Checked Out
                     </Text>
                     {todayAttendance?.checkOut?.distance && (
-                      <Text
-                        className="text-gray-500 text-xs"
-                        style={{ fontFamily: 'Poppins-Regular' }}
-                      >
-                        {Math.round(todayAttendance.checkOut.distance)}m away
-                      </Text>
+                      <View className="flex flex-row items-center gap-1">
+                        <MapPin size={12} color="gray" />
+                        <Text
+                          className="text-gray-500 text-xs"
+                          style={{ fontFamily: 'Poppins-Regular' }}
+                        >
+                          {formatDistance(Math.round(todayAttendance.checkOut.distance))} away
+                        </Text>
+                      </View>
                     )}
                   </View>
                   <CircleArrowOutUpRight
@@ -1035,65 +1070,71 @@ const Home = () => {
               </TouchableOpacity>
             </View>
             <View className="w-full mt-4 gap-y-3 flex flex-col">
-              {salarySlipsList?.slips?.length > 0 && salarySlipsList?.slips?.map((item: any, index: number) => (
-                <View className="w-full flex flex-row  justify-between items-center p-2 border border-gray-200 rounded-2xl">
-                  <View className="flex-row items-center gap-2">
-                    <View className="p-3 rounded-full bg-violet-200">
-                      <FileDigit size={30} color="#5658e6" />
+              {salarySlipsList?.slips?.length > 0 &&
+                salarySlipsList?.slips?.map((item: any, index: number) => (
+                  <View className="w-full flex flex-row  justify-between items-center p-2 border border-gray-200 rounded-2xl">
+                    <View className="flex-row items-center gap-2">
+                      <View className="p-3 rounded-full bg-violet-200">
+                        <FileDigit size={30} color="#5658e6" />
+                      </View>
+                      <View>
+                        <Text
+                          className="text-gray-700"
+                          style={{ fontFamily: 'Poppins-Medium' }}
+                        >
+                          {item?.month} {item?.year}
+                        </Text>
+                        <Text
+                          className="text-gray-700"
+                          style={{ fontFamily: 'Poppins-Regular' }}
+                        >
+                          Net Salary: ₹{item?.netSalary || 0}
+                        </Text>
+                      </View>
                     </View>
-                    <View>
-                      <Text
-                        className="text-gray-700"
-                        style={{ fontFamily: 'Poppins-Medium' }}
+                    <View className="flex-row items-center gap-2">
+                      <TouchableOpacity
+                        onPress={() => {
+                          handleViewSlips(item?._id);
+                        }}
+                        disabled={viewingSlipId === item?._id}
+                        style={{
+                          opacity: viewingSlipId === item?._id ? 0.5 : 1,
+                        }}
                       >
-                        {item?.month} {item?.year}
-                      </Text>
-                      <Text
-                        className="text-gray-700"
-                        style={{ fontFamily: 'Poppins-Regular' }}
+                        {viewingSlipId === item?._id ? (
+                          <ActivityIndicator size="small" color="blue" />
+                        ) : (
+                          <Feather name="eye" size={24} color="gray" />
+                        )}
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => {
+                          handleDownloadSlips(item?._id);
+                        }}
+                        disabled={downloadingSlipId === item?._id}
+                        style={{
+                          opacity: downloadingSlipId === item?._id ? 0.5 : 1,
+                        }}
                       >
-                        Net Salary: ₹{item?.netSalary || 0}
-                      </Text>
+                        {downloadingSlipId === item?._id ? (
+                          <ActivityIndicator size="small" color="green" />
+                        ) : (
+                          <Feather name="download" size={24} color="gray" />
+                        )}
+                      </TouchableOpacity>
                     </View>
                   </View>
-                  <View className="flex-row items-center gap-2">
-                    <TouchableOpacity 
-                      onPress={() => {
-                        handleViewSlips(item?._id)
-                      }}
-                      disabled={viewingSlipId === item?._id}
-                      style={{
-                        opacity: viewingSlipId === item?._id ? 0.5 : 1
-                      }}
-                    >
-                      {viewingSlipId === item?._id ? (
-                        <ActivityIndicator size="small" color="blue" />
-                      ) : (
-                        <Feather name="eye" size={24} color="gray" />
-                      )}
-                    </TouchableOpacity>
-                    <TouchableOpacity 
-                      onPress={() => {
-                        handleDownloadSlips(item?._id)
-                      }}
-                      disabled={downloadingSlipId === item?._id}
-                      style={{
-                        opacity: downloadingSlipId === item?._id ? 0.5 : 1
-                      }}
-                    >
-                      {downloadingSlipId === item?._id ? (
-                        <ActivityIndicator size="small" color="green" />
-                      ) : (
-                        <Feather name="download" size={24} color="gray" />
-                      )}
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ))}
+                ))}
 
               {salarySlipsList?.slips?.length === 0 && (
                 <View className="w-full flex flex-row  justify-between items-center p-2 border border-gray-200 rounded-2xl">
-                  <Text className="text-gray-700" style={{ fontFamily: 'Poppins-Regular' }}>No salary slips found</Text>
+                  <Text
+                    className="text-gray-700"
+                    style={{ fontFamily: 'Poppins-Regular' }}
+                  >
+                    No salary slips found
+                  </Text>
                 </View>
               )}
             </View>
@@ -1608,7 +1649,7 @@ const Home = () => {
           </View>
         </View>
       </ScrollView>
-      
+
       {/* PDF Preview Modal */}
       <SalarySlipPDFViewer
         visible={pdfPreviewVisible}

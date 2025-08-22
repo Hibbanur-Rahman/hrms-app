@@ -5,6 +5,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { enableScreens } from 'react-native-screens';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar, Platform } from 'react-native';
 
 import ModernLoadingScreen from './src/components/ModernLoadingScreen';
 
@@ -196,10 +198,17 @@ function AppContent() {
 
 export default function App() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <Provider store={store}>
-        <AppContent />
-      </Provider>
-    </GestureHandlerRootView>
+    <SafeAreaProvider>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent={true}
+      />
+      <GestureHandlerRootView style={{ flex: 1,paddingTop: Platform.OS === 'ios' ? 0 : StatusBar.currentHeight || 0 }}>
+        <Provider store={store}>
+          <AppContent />
+        </Provider>
+      </GestureHandlerRootView>
+    </SafeAreaProvider>
   );
 }

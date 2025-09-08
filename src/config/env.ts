@@ -21,8 +21,8 @@ try {
 
 // Environment configuration
 export const ENV = {
-  // API_URL: API_URL || 'https://api.hrms.mithilastack.com/api',
-  API_URL: API_URL || 'https://f4b4edd2c675.ngrok-free.app/api',
+  API_URL: API_URL || 'https://api.hrms.mithilastack.com/api',
+  // API_URL: API_URL || 'https://f4b4edd2c675.ngrok-free.app/api',
   MAP_API_KEY: MAP_API_KEY || 'AIzaSyBK6uOPajk9Ncq-p-V8C9kiXBWiYfDbhDE',
   NODE_ENV: NODE_ENV || 'development',
   IS_DEVELOPMENT: (NODE_ENV || 'development') === 'development',

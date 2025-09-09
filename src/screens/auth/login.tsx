@@ -97,7 +97,7 @@ const Login = () => {
           {/* Logo and Header Section */}
           <View className="items-center mt-12 mb-8">
             <View
-              className="w-32 h-32 rounded-full bg-white shadow-lg items-center justify-center mb-6"
+              className="w-32 h-32 rounded-full bg-white shadow-lg items-center justify-center mb-6 p-1"
               style={{
                 shadowColor: '#7C3AED',
                 shadowOffset: { width: 0, height: 4 },
@@ -108,7 +108,7 @@ const Login = () => {
             >
               <Image
                 source={companyInfo?.companyLogo ? { uri: companyInfo?.companyLogo } : logo}
-                className="w-24 h-24 rounded-full"
+                className="w-full h-full rounded-full"
                 resizeMode="contain"
               />
             </View>

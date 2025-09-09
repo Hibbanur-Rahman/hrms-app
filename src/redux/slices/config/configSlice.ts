@@ -20,6 +20,7 @@ const configSlice=createSlice({
         },
         handleSetCompanyInfo:(state,action:PayloadAction<{companyInfo:any}>)=>{
             state.companyInfo=action.payload.companyInfo;
+            console.log("Setting company info to:", state.companyInfo);
         }
     }
 })

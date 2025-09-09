@@ -165,6 +165,7 @@ export default function StartScreens() {
   };
 
   const handleGetStarted = () => {
+    console.log("Get Started pressed");
     if (isNavigating) return;
     setIsNavigating(true);
     navigation.reset({
@@ -229,11 +230,14 @@ export default function StartScreens() {
       <View className="flex-1 bg-white">
         <StatusBar barStyle="dark-content" />
         
-        <View className="absolute top-4 right-6 z-10">
+        <View className="absolute top-4 right-6 z-[100]">
           <TouchableOpacity
-            onPress={handleGetStarted}
+            onPress={()=>{
+              console.log("Skip pressed");
+              handleGetStarted();
+            }}
             disabled={isNavigating}
-            className="bg-gray-50 px-4 py-2 rounded-full shadow-sm"
+            className="bg-gray-50 px-4 py-2 rounded-full shadow-sm "
           >
             <Text className="text-gray-600" style={{fontFamily: 'Poppins-Medium'}}>
               Skip

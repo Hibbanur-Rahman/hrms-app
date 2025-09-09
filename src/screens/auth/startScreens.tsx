@@ -134,13 +134,13 @@ export default function StartScreens() {
   });
 
   const handleNext = () => {
-    if (isNavigating || currentStep === 3) {
+    if (isNavigating && currentStep === 3) {
       AsyncStorage.setItem('isOnboardingCompleted', 'true');
       console.log('isOnboardingCompleted', 'true');
       console.log('currentStep', currentStep);
       navigation.reset({
         index: 0,
-        routes: [{ name: 'Login' }],
+        routes: [{ name: 'InitialScreen' }],
       });
       return;
     }
@@ -169,20 +169,42 @@ export default function StartScreens() {
     setIsNavigating(true);
     navigation.reset({
       index: 0,
-      routes: [{ name: 'Login' }],
+      routes: [{ name: 'InitialScreen' }],
     });
   };
 
   useEffect(() => {
-    AsyncStorage.getItem('access_token').then(token => {
-      if (token && !isNavigating) {
+    const checkStorageAndNavigate = async () => {
+      if (isNavigating) return;
+      
+      try {
+        const [token, baseUrl] = await Promise.all([
+          AsyncStorage.getItem('access_token'),
+          AsyncStorage.getItem('baseUrl')
+        ]);
+        
         setIsNavigating(true);
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Layout' }],
-        });
+        
+        if (baseUrl && token) {
+          // Both baseUrl and access_token are present - navigate to Layout
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Layout' }],
+          });
+        } else if (baseUrl && !token) {
+          // BaseUrl is present but no access_token - navigate to Login
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Login' }],
+          });
+        }
+        // If no baseUrl, stay on current screen (onboarding)
+      } catch (error) {
+        console.error('Error checking storage:', error);
       }
-    });
+    };
+    
+    checkStorageAndNavigate();
   }, [isNavigating, navigation]);
 
   const renderProgressDots = () => {

@@ -5,7 +5,7 @@ import { Alert } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../App';
-import { ENV } from "./env";
+import { ENV, getApiUrl } from "./env";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Request = async (httpOptions: any) => {
@@ -14,8 +14,12 @@ const Request = async (httpOptions: any) => {
 
   const token = await AsyncStorage.getItem("access_token");
   if (!httpOptions.exact) {
-    httpOptions.url = ENV.API_URL + "/" + httpOptions.url;
+    // Use dynamic API URL that updates with Redux state changes
+    const dynamicApiUrl = getApiUrl();
+    console.log("dynamicApiUrl", dynamicApiUrl);
+    httpOptions.url = dynamicApiUrl + "/" + httpOptions.url;
     console.log("http header:", httpOptions);
+    console.log("dynamic API URL:", dynamicApiUrl);
   }
   httpOptions.headers = {
     "Content-Type": httpOptions.files

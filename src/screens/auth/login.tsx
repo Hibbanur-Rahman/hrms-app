@@ -18,14 +18,18 @@ import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../../App';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
-import { handleUserLogin,handleIsAuthenticated } from '../../redux/slices/auth/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  handleUserLogin,
+  handleIsAuthenticated,
+} from '../../redux/slices/auth/authSlice';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 const Login = () => {
   const navigation = useNavigation<NavigationProp>();
   const dispatch = useDispatch();
+  const { companyInfo } = useSelector((state: any) => state.config);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -68,7 +72,7 @@ const Login = () => {
           const user = response?.data?.user;
           await AsyncStorage.setItem('user', JSON.stringify(user));
           dispatch(handleUserLogin(user));
-          dispatch(handleIsAuthenticated({isAuthenticated:true}));
+          dispatch(handleIsAuthenticated({ isAuthenticated: true }));
           navigation.navigate('Layout');
           console.log(response);
           setIsLoading(false);
@@ -103,7 +107,7 @@ const Login = () => {
               }}
             >
               <Image
-                source={logo}
+                source={companyInfo?.companyLogo ? { uri: companyInfo?.companyLogo } : logo}
                 className="w-24 h-24 rounded-full"
                 resizeMode="contain"
               />

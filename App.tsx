@@ -36,6 +36,9 @@ import Sessions from './src/screens/sessions/sessions';
 import StudentDetails from './src/screens/students/studentDetails';
 import Tasks from './src/screens/projects/tasks';
 import TaskDetails from './src/screens/projects/taskDetails';
+import InitialScreen from './src/screens/auth/initialScreen';
+import { handleSetBaseUrl, handleSetCompanyInfo } from './src/redux/slices/config/configSlice';
+import ConfigService from './src/services/ConfigService';
 
 enableScreens();
 
@@ -60,7 +63,8 @@ export type RootStackParamList = {
   };
   TaskDetails:{
     taskId: string;
-  }
+  },
+  InitialScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -93,7 +97,27 @@ function AppContent() {
     }
   };
 
+  const getBaseUrl=async()=>{
+    try{
+      const baseUrl=await AsyncStorage.getItem('baseUrl');
+      if(baseUrl){
+        console.log("base url from storage:",baseUrl);
+        dispatch(handleSetBaseUrl({ baseUrl }));
+        const response=await ConfigService.GetClientConfig();
+        console.log("config response:",response);
+        if(response?.status===200){
+          const configData=response?.data?.data;
+          dispatch(handleSetCompanyInfo({companyInfo:configData}));
+        }
+      }else{
+        console.log("no base url found in storage");
+      }
+    } catch(error){
+      console.log("error while getting base url:",error);
+    }
+  }
   useEffect(() => {
+    getBaseUrl();
     // Validate environment variables
     validateEnv();
     checkAuthStatus();
@@ -109,6 +133,11 @@ function AppContent() {
         <Stack.Screen
           name="StartScreen"
           component={StartScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="InitialScreen"
+          component={InitialScreen}
           options={{ headerShown: false }}
         />
         <Stack.Screen

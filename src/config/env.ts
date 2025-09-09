@@ -34,10 +34,10 @@ export const getApiUrl = (): string => {
     }
     
     // Fallback to environment variable or default URL
-    return API_URL || 'https://88fa1e1eea89.ngrok-free.app/api';
+    return API_URL || 'https://api.hrms.mithilastack.com/api';
   } catch (error) {
     console.log("error while getting base url:", error);
-    return API_URL || 'https://88fa1e1eea89.ngrok-free.app/api';
+    return API_URL || 'https://api.hrms.mithilastack.com/api';
   }
 }
 
@@ -45,17 +45,17 @@ export const getApiUrl = (): string => {
 export const getBaseUrl = (): string => {
   try {
     const baseUrl = store?.getState()?.config?.baseUrl;
-    return baseUrl || 'https://88fa1e1eea89.ngrok-free.app';
+    return baseUrl || 'https://api.hrms.mithilastack.com';
   } catch (error) {
     console.log("error while getting base url:", error);
-    return 'https://88fa1e1eea89.ngrok-free.app';
+    return 'https://api.hrms.mithilastack.com';
   }
 }
 
 // Environment configuration
 export const ENV = {
   // Use environment variable as fallback, but getApiUrl() will provide dynamic URL
-  API_URL: API_URL || 'https://88fa1e1eea89.ngrok-free.app/api',
+  API_URL: API_URL || 'https://api.hrms.mithilastack.com/api',
   MAP_API_KEY: MAP_API_KEY || 'AIzaSyBK6uOPajk9Ncq-p-V8C9kiXBWiYfDbhDE',
   NODE_ENV: NODE_ENV || 'development',
   IS_DEVELOPMENT: (NODE_ENV || 'development') === 'development',
